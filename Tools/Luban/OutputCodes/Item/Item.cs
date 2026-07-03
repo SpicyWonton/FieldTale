@@ -11,11 +11,11 @@ using Luban;
 using Luban.SimpleJSON;
 
 
-namespace cfg.demo
+namespace FieldTale.DataTables
 {
-public sealed partial class item : Luban.BeanBase
+public sealed partial class Item : Luban.BeanBase
 {
-    public item(JSONNode _buf) 
+    public Item(JSONNode _buf) 
     {
         { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
         { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
@@ -23,9 +23,9 @@ public sealed partial class item : Luban.BeanBase
         { if(!_buf["count"].IsNumber) { throw new SerializationException(); }  Count = _buf["count"]; }
     }
 
-    public static item Deserializeitem(JSONNode _buf)
+    public static Item DeserializeItem(JSONNode _buf)
     {
-        return new demo.item(_buf);
+        return new Item(_buf);
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ public sealed partial class item : Luban.BeanBase
     /// </summary>
     public readonly int Count;
    
-    public const int __ID__ = 750578750;
+    public const int __ID__ = 2289459;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)

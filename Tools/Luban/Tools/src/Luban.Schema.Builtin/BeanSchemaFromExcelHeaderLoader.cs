@@ -44,7 +44,12 @@ public class BeanSchemaFromExcelHeaderLoader : IBeanSchemaLoader
             Parent = "",
             Groups = new(),
             Fields = new(),
-            Tags = new Dictionary<string, string>(),
+            // 把 table 的 outputDir tag 一并带给它的值类型 bean，
+            // 这样自定义 CodeTarget（如 DirOrganizedCsharpCodeTarget）也能把 bean 代码
+            // 放进和 table 相同的物理目录，而不受 Namespace 是否扁平化的影响。
+            Tags = table.Tags != null && table.Tags.TryGetValue("outputDir", out var outputDir)
+                ? new Dictionary<string, string> { ["outputDir"] = outputDir }
+                : new Dictionary<string, string>(),
         };
 
 

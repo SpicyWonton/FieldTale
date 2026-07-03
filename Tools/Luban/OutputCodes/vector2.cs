@@ -11,7 +11,7 @@ using Luban;
 using Luban.SimpleJSON;
 
 
-namespace cfg
+namespace FieldTale.DataTables
 {
 public partial struct vector2
 {

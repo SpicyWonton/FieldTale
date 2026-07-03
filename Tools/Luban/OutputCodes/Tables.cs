@@ -10,21 +10,21 @@
 using Luban;
 using Luban.SimpleJSON;
 
-namespace cfg
+namespace FieldTale.DataTables
 {
 public partial class Tables
 {
-    public demo.Tbitem Tbitem {get; }
+    public TbItem TbItem {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
-        Tbitem = new demo.Tbitem(loader("demo_tbitem"));
+        TbItem = new TbItem(loader("Item/tbitem"));
         ResolveRef();
     }
     
     private void ResolveRef()
     {
-        Tbitem.ResolveRef(this);
+        TbItem.ResolveRef(this);
     }
 }
 
