@@ -21,6 +21,7 @@ namespace UnityGameFramework.Editor
 #if UNITY_2017_3_OR_NEWER
             "UnityGameFramework.Runtime",
 #endif
+            "FieldTale.Runtime",
             "Assembly-CSharp",
         };
 
@@ -29,6 +30,7 @@ namespace UnityGameFramework.Editor
 #if UNITY_2017_3_OR_NEWER
             "UnityGameFramework.Runtime",
 #endif
+            "FieldTale.Runtime",
             "Assembly-CSharp",
 #if UNITY_2017_3_OR_NEWER
             "UnityGameFramework.Editor",

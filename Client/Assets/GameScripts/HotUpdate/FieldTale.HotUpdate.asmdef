@@ -1,7 +1,12 @@
 {
-    "name": "HotUpdate",
+    "name": "FieldTale.HotUpdate",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:363c5eb08ff8e6a439b85e37b8c20d96",
+        "GUID:491ebb79fc88f124aa75096e663bb6c5",
+        "GUID:13ba8ce62aa80c74598530029cb2d649",
+        "GUID:2d2b6246a7493504287fcd7b83fff04d"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

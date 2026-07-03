@@ -1,15 +1,13 @@
 {
-    "name": "UnityGameFramework.Editor",
+    "name": "FieldTale.Runtime",
     "rootNamespace": "",
     "references": [
         "GUID:363c5eb08ff8e6a439b85e37b8c20d96",
         "GUID:491ebb79fc88f124aa75096e663bb6c5"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
