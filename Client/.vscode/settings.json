@@ -56,5 +56,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "FieldTale.sln"
+    "dotnet.defaultSolution": "Client.sln",
+    "dotrush.roslyn.projectOrSolutionFiles": [
+        "c:\\Codes\\Fork\\FieldTale\\Client\\Client.sln"
+    ]
 }
