@@ -15,16 +15,19 @@ namespace FieldTale.DataTables
 public partial class Tables
 {
     public TbItem TbItem {get; }
+    public TbScene TbScene {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
         TbItem = new TbItem(loader("Item/tbitem"));
+        TbScene = new TbScene(loader("Scene/tbscene"));
         ResolveRef();
     }
     
     private void ResolveRef()
     {
         TbItem.ResolveRef(this);
+        TbScene.ResolveRef(this);
     }
 }
 

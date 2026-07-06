@@ -1,4 +1,3 @@
-using GameFramework.DataTable;
 using GameFramework.Event;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
