@@ -38,7 +38,7 @@ namespace FieldTale.HotUpdate
             // 还原游戏速度
             FrameworkRoot.Base.ResetNormalGameSpeed();
 
-            FrameworkRoot.Scene.LoadScene("Assets/GameRes/Scenes/Game.unity", 1, this);
+            FrameworkRoot.Scene.LoadScene(AssetUtility.GetSceneAsset("Game"), 1, this);
         }
 
         protected override void OnLeave(IFsm<IProcedureManager> procedureOwner, bool isShutdown)

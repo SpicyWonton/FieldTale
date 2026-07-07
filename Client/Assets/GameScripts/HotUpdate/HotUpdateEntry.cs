@@ -11,7 +11,7 @@ namespace FieldTale.HotUpdate
 #if UNITY_EDITOR
             LaunchHotUpdate();
 #else
-
+            LaunchHotUpdate();
 #endif
         }
 

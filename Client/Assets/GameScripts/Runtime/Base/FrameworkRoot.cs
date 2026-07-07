@@ -7,6 +7,7 @@ namespace FieldTale
         private void Start()
         {
             InitBuiltinComponents();
+            InitCustomComponents();
         }
     }
 }
