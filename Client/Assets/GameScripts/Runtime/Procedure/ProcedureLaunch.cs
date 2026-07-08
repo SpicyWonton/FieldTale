@@ -10,6 +10,9 @@ namespace FieldTale
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
         {
             base.OnEnter(procedureOwner);
+
+            FrameworkRoot.BuiltinData.InitBuildInfo();
+            FrameworkRoot.BuiltinData.InitDefaultDictionary();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)

@@ -118,8 +118,8 @@ namespace FieldTale
             // 设置资源更新下载地址
             FrameworkRoot.Resource.UpdatePrefixUri = Utility.Path.GetRegularPath(m_VersionInfo.UpdatePrefixUri);
 
-            m_CheckVersionComplete = true;
             m_NeedUpdateVersion = FrameworkRoot.Resource.CheckVersionList(m_VersionInfo.InternalResourceVersion) == CheckVersionListResult.NeedUpdate;
+            m_CheckVersionComplete = true;
         }
 
         private void OnWebRequestFailure(object sender, GameEventArgs e)
@@ -139,13 +139,11 @@ namespace FieldTale
         /// <returns>平台标识符。</returns>
         private string GetPlatformPath()
         {
-            // 这里和 GameBuildEventHandler.GetPlatformPath() 对应。
-            // 使用 平台标识符 关联 UnityEngine.RuntimePlatform 和 UnityGameFramework.Editor.ResourceTools.Platform
             switch (Application.platform)
             {
                 case RuntimePlatform.WindowsEditor:
                 case RuntimePlatform.WindowsPlayer:
-                    return "Windows";
+                    return System.IntPtr.Size == 8 ? "Windows64" : "Windows";
 
                 case RuntimePlatform.OSXEditor:
                 case RuntimePlatform.OSXPlayer:
@@ -160,7 +158,7 @@ namespace FieldTale
                 case RuntimePlatform.WSAPlayerX64:
                 case RuntimePlatform.WSAPlayerX86:
                 case RuntimePlatform.WSAPlayerARM:
-                    return "WSA";
+                    return "WindowsStore";
 
                 case RuntimePlatform.WebGLPlayer:
                     return "WebGL";

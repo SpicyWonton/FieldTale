@@ -2,9 +2,9 @@
 <UnityGameFramework>
   <ResourceCollection>
     <Resources>
-      <Resource Name="DataTables" LoadType="0" Packed="True" />
-      <Resource Name="Entities" LoadType="0" Packed="True" />
-      <Resource Name="HotUpdate" LoadType="0" Packed="True" />
+      <Resource Name="DataTables" LoadType="0" Packed="False" />
+      <Resource Name="Entities" LoadType="0" Packed="False" />
+      <Resource Name="HotUpdate" LoadType="0" Packed="False" />
       <Resource Name="Scenes" LoadType="0" Packed="True" />
     </Resources>
     <Assets>

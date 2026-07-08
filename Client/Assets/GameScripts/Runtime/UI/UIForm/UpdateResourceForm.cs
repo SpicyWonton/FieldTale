@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace FieldTale
 {
     public class UpdateResourceForm : MonoBehaviour
     {
         [SerializeField]
-        private Text m_DescriptionText = null;
+        private TextMeshProUGUI m_DescriptionText = null;
 
         [SerializeField]
         private Slider m_ProgressSlider = null;

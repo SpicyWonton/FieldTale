@@ -1,0 +1,11 @@
+#	Key	Comment	Value
+0	CheckVersion.Tips	检查版本提示	正在检查游戏是否需要更新，请稍候……
+1	UpdateResource.Tips	更新资源提示	{0}/{1}, {2}/{3}, {4:P0}, {5}/s
+2	ForceUpdate.Title	强制更新标题	强制更新
+3	ForceUpdate.Message	强制更新内容	发现新版本，请更新游戏。
+4	ForceUpdate.UpdateButton	强制更新按钮	更新
+5	ForceUpdate.QuitButton	强制更新退出按钮	退出
+6	UpdateResourceViaCarrierDataNetwork.Title	流量提醒标题	流量提醒
+7	UpdateResourceViaCarrierDataNetwork.Message	流量提醒内容	当前使用移动数据网络，继续下载将消耗流量。
+8	UpdateResourceViaCarrierDataNetwork.UpdateButton	流量提醒下载按钮	继续下载
+9	UpdateResourceViaCarrierDataNetwork.QuitButton	流量提醒退出按钮	退出

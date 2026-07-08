@@ -86,7 +86,7 @@ namespace FieldTale
         {
             if (m_UpdateResourceForm == null)
             {
-                m_UpdateResourceForm = Object.Instantiate(FrameworkRoot.BuiltinData.UpdateResourceFormTemplate);
+                m_UpdateResourceForm = Object.Instantiate(FrameworkRoot.BuiltinData.UpdateResourceFormTemplate, FrameworkRoot.BuiltinData.Canvas);
             }
 
             Log.Info("Start update resources...");

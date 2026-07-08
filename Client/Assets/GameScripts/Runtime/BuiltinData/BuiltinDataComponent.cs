@@ -14,6 +14,8 @@ namespace FieldTale
         private UpdateResourceForm m_UpdateResourceFormTemplate = null;
         [SerializeField]
         private NativeDialogForm m_NativeDialogFormTemplate = null;
+        [SerializeField]
+        private Transform m_Canvas = null;
 
         private BuildInfo m_BuildInfo = null;
         private NativeDialogForm m_NativeDialogForm;
@@ -31,6 +33,14 @@ namespace FieldTale
             get
             {
                 return m_UpdateResourceFormTemplate;
+            }
+        }
+
+        public Transform Canvas
+        {
+            get
+            {
+                return m_Canvas;
             }
         }
 
@@ -73,7 +83,7 @@ namespace FieldTale
         {
             if (m_NativeDialogForm == null)
             {
-                m_NativeDialogForm = Instantiate(m_NativeDialogFormTemplate);
+                m_NativeDialogForm = Instantiate(m_NativeDialogFormTemplate, m_Canvas);
             }
 
             m_NativeDialogForm.OnOpen(dialogParams);

@@ -5,6 +5,7 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using FieldTale;
 using GameFramework;
 using System.IO;
 using UnityEditor;
@@ -15,6 +16,12 @@ namespace FieldTale.Editor
 {
     public sealed class FieldTaleBuildEventHandler : IBuildEventHandler
     {
+        private const string UpdatePrefixUriFormat = "http://localhost:8080/Full/{0}_{1}/{2}";
+
+        private string m_ApplicableGameVersion;
+        private int m_InternalResourceVersion;
+        private string m_OutputDirectory;
+
         public bool ContinueOnFailure
         {
             get
@@ -27,6 +34,10 @@ namespace FieldTale.Editor
             Platform platforms, AssetBundleCompressionType assetBundleCompression, string compressionHelperTypeName, bool additionalCompressionSelected, bool forceRebuildAssetBundleSelected, string buildEventHandlerTypeName, string outputDirectory, BuildAssetBundleOptions buildAssetBundleOptions,
             string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath, string buildReportPath)
         {
+            m_ApplicableGameVersion = applicableGameVersion;
+            m_InternalResourceVersion = internalResourceVersion;
+            m_OutputDirectory = outputDirectory;
+
             string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
             Directory.CreateDirectory(streamingAssetsPath);
 
@@ -60,25 +71,53 @@ namespace FieldTale.Editor
 
         public void OnOutputUpdatableVersionListData(Platform platform, string versionListPath, int versionListLength, int versionListHashCode, int versionListCompressedLength, int versionListCompressedHashCode)
         {
+            string platformPath = platform.ToString();
+            string updatePrefixUri = Utility.Text.Format(UpdatePrefixUriFormat, m_ApplicableGameVersion.Replace('.', '_'), m_InternalResourceVersion, platformPath);
+
+            string versionInfoJson = Utility.Text.Format(
+                "{{\n" +
+                "  \"ForceUpdateGame\": false,\n" +
+                "  \"LatestGameVersion\": \"{0}\",\n" +
+                "  \"InternalGameVersion\": 0,\n" +
+                "  \"InternalResourceVersion\": {1},\n" +
+                "  \"UpdatePrefixUri\": \"{2}\",\n" +
+                "  \"VersionListLength\": {3},\n" +
+                "  \"VersionListHashCode\": {4},\n" +
+                "  \"VersionListCompressedLength\": {5},\n" +
+                "  \"VersionListCompressedHashCode\": {6}\n" +
+                "}}",
+                m_ApplicableGameVersion, m_InternalResourceVersion, updatePrefixUri,
+                versionListLength, versionListHashCode, versionListCompressedLength, versionListCompressedHashCode);
+
+            string versionInfoPath = Utility.Path.GetRegularPath(Path.Combine(m_OutputDirectory, Utility.Text.Format("{0}Version.txt", platformPath)));
+            File.WriteAllText(versionInfoPath, versionInfoJson);
+            Debug.LogFormat("Generate version info '{0}' for '{1}'.", versionInfoPath, platformPath);
         }
 
         public void OnPostprocessPlatform(Platform platform, string workingPath, bool outputPackageSelected, string outputPackagePath, bool outputFullSelected, string outputFullPath, bool outputPackedSelected, string outputPackedPath, bool isSuccess)
         {
-            if (!outputPackageSelected)
+            if (outputPackedSelected)
             {
-                return;
+                CopyDirectoryToStreamingAssets(outputPackedPath);
             }
+            else if (outputPackageSelected)
+            {
+                CopyDirectoryToStreamingAssets(outputPackagePath);
+            }
+        }
 
-            if (platform != Platform.Windows64)
+        private static void CopyDirectoryToStreamingAssets(string sourcePath)
+        {
+            if (!Directory.Exists(sourcePath))
             {
                 return;
             }
 
             string streamingAssetsPath = Utility.Path.GetRegularPath(Path.Combine(Application.dataPath, "StreamingAssets"));
-            string[] fileNames = Directory.GetFiles(outputPackagePath, "*", SearchOption.AllDirectories);
+            string[] fileNames = Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories);
             foreach (string fileName in fileNames)
             {
-                string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath, fileName.Substring(outputPackagePath.Length)));
+                string destFileName = Utility.Path.GetRegularPath(Path.Combine(streamingAssetsPath, fileName.Substring(sourcePath.Length)));
                 FileInfo destFileInfo = new FileInfo(destFileName);
                 if (!destFileInfo.Directory.Exists)
                 {

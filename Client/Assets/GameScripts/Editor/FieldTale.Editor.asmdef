@@ -4,7 +4,8 @@
     "references": [
         "HybridCLR.Editor",
         "GameFramework",
-        "UnityGameFramework.Editor"
+        "UnityGameFramework.Editor",
+        "GUID:2d2b6246a7493504287fcd7b83fff04d"
     ],
     "includePlatforms": [
         "Editor"
