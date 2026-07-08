@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<UnityGameFramework>
+  <ResourceCollection>
+    <Resources>
+      <Resource Name="DataTables" LoadType="0" Packed="True" />
+      <Resource Name="Entities" LoadType="0" Packed="True" />
+      <Resource Name="HotUpdate" LoadType="0" Packed="True" />
+      <Resource Name="Scenes" LoadType="0" Packed="True" />
+    </Resources>
+    <Assets>
+      <Asset Guid="19edd8652464e3e4c9612d9280f3034a" ResourceName="DataTables" />
+      <Asset Guid="2cda990e2423bbf4892e6590ba056729" ResourceName="Scenes" />
+      <Asset Guid="323733a3fc1667c4d9e349385b18ac6d" ResourceName="HotUpdate" />
+      <Asset Guid="b2c5de3eada5943a0bedb4f88f7cdb07" ResourceName="Entities" />
+      <Asset Guid="bede41822ba641b4d8cb2102a0547fa9" ResourceName="Scenes" />
+    </Assets>
+  </ResourceCollection>
+</UnityGameFramework>

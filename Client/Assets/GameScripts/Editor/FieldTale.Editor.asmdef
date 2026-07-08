@@ -2,7 +2,9 @@
     "name": "FieldTale.Editor",
     "rootNamespace": "",
     "references": [
-        "HybridCLR.Editor"
+        "HybridCLR.Editor",
+        "GameFramework",
+        "UnityGameFramework.Editor"
     ],
     "includePlatforms": [
         "Editor"

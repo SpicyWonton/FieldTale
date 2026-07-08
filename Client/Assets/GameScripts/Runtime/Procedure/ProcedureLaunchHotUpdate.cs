@@ -12,6 +12,7 @@ namespace FieldTale
     public class ProcedureLaunchHotUpdate : ProcedureBase
     {
         private const string HotUpdateAssemblyName = "FieldTale.HotUpdate";
+        private const string HotUpdateAssemblyAssetName = "Assets/HybridCLRGenerate/FieldTale.HotUpdate.dll.bytes";
         private const string HotUpdateEntryTypeName = "FieldTale.HotUpdate.HotUpdateEntry";
 
         protected override void OnEnter(IFsm<IProcedureManager> procedureOwner)
@@ -28,11 +29,11 @@ namespace FieldTale
 
             LaunchHotUpdate(hotUpdateAssembly);
 #else
-            FrameworkRoot.Resource.LoadAsset("Assets/HybridCLRGenerate/FieldTale.HotUpdate.dll.bytes", new LoadAssetCallbacks(OnLoadAssetSuccess, OnLoadAssetFail));
+            FrameworkRoot.Resource.LoadAsset(HotUpdateAssemblyAssetName, new LoadAssetCallbacks(OnLoadHotUpdateAssetSuccess, OnLoadAssetFail));
 #endif
         }
 
-        private void OnLoadAssetSuccess(string assetName, object asset, float duration, object userData)
+        private void OnLoadHotUpdateAssetSuccess(string assetName, object asset, float duration, object userData)
         {
             TextAsset dll = (TextAsset)asset;
             Assembly hotUpdateAssembly = Assembly.Load(dll.bytes);
