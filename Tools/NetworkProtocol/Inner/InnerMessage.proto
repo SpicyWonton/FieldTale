@@ -13,3 +13,12 @@ package Sining.Message;
 // 通过添加 // using 导出时添加自定义命名空间
 // 例如: // using System.Runtime // using System.Reflection
 
+/// 通知Map进行下线操作
+message G2M_OfflineRequest // IRoamingRequest,M2G_OfflineResponse,MapRoamingType
+{
+	int32 OfflineTime = 1;		// 延迟下线时间
+}
+message M2G_OfflineResponse // IRoamingResponse
+{
+
+}

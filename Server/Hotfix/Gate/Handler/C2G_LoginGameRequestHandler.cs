@@ -11,10 +11,10 @@ public sealed class C2G_LoginGameRequestHandler : MessageRPC<C2G_LoginGameReques
 {
     protected override async FTask Run(Session session, C2G_LoginGameRequest request, G2C_LoginGameResponse response, Action reply)
     {
-        var account = request.Account;
+        var accountName = request.Account;
         var password = request.Password;
 
-        if (string.IsNullOrEmpty(account))
+        if (string.IsNullOrEmpty(accountName))
         {
             response.ErrorCode = 1;
             return;
@@ -26,16 +26,16 @@ public sealed class C2G_LoginGameRequestHandler : MessageRPC<C2G_LoginGameReques
             return;
         }
         
-        // if (!AccountManageHelper.Add(session.Scene, accountName, out var account))
-        // {
-        //     response.ErrorCode = 1;
-        //     return;
-        // }
-        // // var account = Entity.Create<Account>(session.Scene);
-        // account.Session = session;
-        // // 挂载组件用来标记这个Session下的Account，后面下线流程也会用到
-        // session.AddComponent<GateAccountFlagComponent>().Account = account;
-        // // 执行上线流程
-        // await AccountHelper.Online(session, account);
+        if (!AccountManageHelper.Add(session.Scene, accountName, password, out var account))
+        {
+            response.ErrorCode = 1;
+            return;
+        }
+        // var account = Entity.Create<Account>(session.Scene);
+        account.Session = session;
+        // 挂载组件用来标记这个Session下的Account，后面下线流程也会用到
+        session.AddComponent<GateAccountFlagComponent>().Account = account;
+        // 执行上线流程
+        await AccountHelper.Online(session, account);
     }
 }

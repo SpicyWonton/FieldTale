@@ -39,7 +39,7 @@ public sealed class OnCreateSceneEvent : AsyncEventSystem<OnCreateScene>
             // }
             case SceneType.Gate:
             {
-                // scene.AddComponent<AccountManageComponent>();
+                scene.AddComponent<AccountManageComponent>();
                 break;
             }
         }
