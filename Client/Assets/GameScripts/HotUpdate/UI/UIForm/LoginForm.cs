@@ -4,9 +4,11 @@ using Fantasy.Async;
 using UnityEngine;
 using UnityEngine.UI;
 using Log = UnityGameFramework.Runtime.Log;
+using FieldTale;
 using GameFramework;
+using UnityGameFramework.Runtime;
 
-public class LoginForm : MonoBehaviour
+public class LoginForm : UIFormLogic
 {
     [SerializeField]
     private TextMeshProUGUI m_TmpAccount;
@@ -21,14 +23,23 @@ public class LoginForm : MonoBehaviour
         private set;
     }
 
-    // Start is called before the first frame update
-    private void Start()
+    protected override void OnOpen(object userData)
     {
+        base.OnOpen(userData);
+
+        LoginSuccess = false;
         m_BtnLogin.onClick.RemoveAllListeners();
         m_BtnLogin.onClick.AddListener(() =>
         {
             OnBtnLoginClicked().Coroutine();
         });
+    }
+
+    protected override void OnClose(bool isShutdown, object userData)
+    {
+        m_BtnLogin.onClick.RemoveAllListeners();
+
+        base.OnClose(isShutdown, userData);
     }
 
     private async FTask OnBtnLoginClicked()
@@ -55,5 +66,6 @@ public class LoginForm : MonoBehaviour
         }
 
         LoginSuccess = true;
+        FrameworkRoot.UI.CloseUIForm(UIForm);
     }
 }

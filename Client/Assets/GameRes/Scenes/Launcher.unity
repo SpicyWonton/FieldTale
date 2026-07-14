@@ -178,7 +178,7 @@ MonoBehaviour:
   heartbeatTimeOut: 30000
   heartbeatTimeOutInterval: 5000
   maxPingSamples: 4
-  isRuntimeInstance: 0
+  isRuntimeInstance: 1
   onConnectComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -498,6 +498,10 @@ PrefabInstance:
       propertyPath: m_AvailableProcedureTypeNames.Array.data[7]
       value: FieldTale.ProcedureVerifyResources
       objectReference: {fileID: 0}
+    - target: {fileID: 11454530, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_InstanceRoot
+      value: 
+      objectReference: {fileID: 293544348}
     - target: {fileID: 11454530, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_UIGroups.Array.size
       value: 1
