@@ -13,16 +13,13 @@ package Fantasy.Network.Message;
 // 通过添加 // using 导出时添加自定义命名空间
 // 例如: // using System.Runtime // using System.Reflection
 
-
-message C2G_TestMessage // IMessage
+/// 客户端登陆到Gate服务器
+message C2G_LoginGameRequest // IRequest,G2C_LoginGameResponse
 {
-	string Tag = 1;
+	string Account = 1;
+	string Password = 2;
 }
-message C2G_TestRequest // IRequest,G2C_TestResponse
+message G2C_LoginGameResponse // IResponse
 {
-	string Tag = 1;
-}
-message G2C_TestResponse // IResponse
-{
-	string Tag = 1;
+	
 }

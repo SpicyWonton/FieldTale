@@ -26,8 +26,7 @@ namespace FieldTale.HotUpdate
                 return;
             }
 
-            procedureOwner.SetData<VarInt32>("NextSceneId", 1002);
-            ChangeState<ProcedureChangeScene>(procedureOwner);
+            ChangeState<ProcedureLogin>(procedureOwner);
         }
 
         private void PreloadResources()

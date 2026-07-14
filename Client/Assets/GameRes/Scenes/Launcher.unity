@@ -122,6 +122,72 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &77223147
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 77223148}
+  - component: {fileID: 77223149}
+  m_Layer: 0
+  m_Name: Fantasy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &77223148
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77223147}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2138324308}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &77223149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77223147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744ea2ac262d44f478bcd3c9adacca57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runtimeName: FantasyRuntime
+  remoteIP: 127.0.0.1
+  remotePort: 20000
+  protocol: 0
+  enableHttps: 0
+  connectTimeout: 5000
+  enableReceiveMessageJsonLog: 0
+  enableHeartbeat: 1
+  heartbeatInterval: 2000
+  heartbeatTimeOut: 30000
+  heartbeatTimeOutInterval: 5000
+  maxPingSamples: 4
+  isRuntimeInstance: 0
+  onConnectComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onConnectFail:
+    m_PersistentCalls:
+      m_Calls: []
+  onConnectDisconnect:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &210032165
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,6 +498,14 @@ PrefabInstance:
       propertyPath: m_AvailableProcedureTypeNames.Array.data[7]
       value: FieldTale.ProcedureVerifyResources
       objectReference: {fileID: 0}
+    - target: {fileID: 11454530, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_UIGroups.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11454530, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_UIGroups.Array.data[0].m_Name
+      value: Default
+      objectReference: {fileID: 0}
     - target: {fileID: 11494652, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
       propertyPath: m_EntityGroups.Array.size
       value: 1
@@ -634,6 +708,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 210032166}
+  - {fileID: 77223148}
   m_Father: {fileID: 2086750037}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807

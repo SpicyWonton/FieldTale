@@ -25,6 +25,7 @@ namespace FieldTale.HotUpdate
                 new ProcedureChangeScene(),
                 new ProcedureMain(),
                 new ProcedurePreload(),
+                new ProcedureLogin(),
             };
             procedureManager.Initialize(GameFrameworkEntry.GetModule<IFsmManager>(), procedures);
             procedureManager.StartProcedure<ProcedurePreload>();
