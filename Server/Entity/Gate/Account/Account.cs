@@ -10,4 +10,3 @@ public sealed class Account : Entity
 
     public EntityReference<Session> Session;
 }
-

@@ -7,6 +7,9 @@ namespace Fantasy
     public static partial class OuterOpcode
     {
         public const uint C2G_LoginGameRequest = 268445457;
+        public const uint C2M_InitComplete = 2550146833;
         public const uint G2C_LoginGameResponse = 402663185;
+        public const uint M2C_PlayerCreate = 2550146834;
+        public const uint M2C_PlayerLeave = 2550146835;
     }
 }

@@ -23,3 +23,33 @@ message G2C_LoginGameResponse // IResponse
 {
 	
 }
+/// 客户端通知服务器可以接收服务器推送的消息
+message C2M_InitComplete // IRoamingMessage,MapRoamingType
+{
+	
+}
+/// Map服务器通知客户端创建新的Player
+message M2C_PlayerCreate // IRoamingMessage,MapRoamingType
+{
+	PlayerInfo Player = 1;	// 玩家信息
+	bool IsSelf = 2;	    // 是否是自己
+}
+/// Map通知客户端有Player离开
+message M2C_PlayerLeave // IRoamingMessage,MapRoamingType
+{
+	int64 PlayerId = 1;
+}
+/// Player信息
+message PlayerInfo
+{
+	int64 PlayerId = 1;			// Player的Id
+	string Name = 2;			// Player的名字
+	Position Pos = 3;			// 位置信息
+}
+/// 坐标信息
+message Position
+{
+	float X = 1;
+	float Y = 2;
+	float Z = 3;
+}

@@ -113,4 +113,248 @@ namespace Fantasy
         [ProtoMember(1)]
         public uint ErrorCode { get; set; }
     }
+    /// <summary>
+    /// 客户端通知服务器可以接收服务器推送的消息
+    /// </summary>
+    [Serializable]
+    [ProtoContract]
+    public partial class C2M_InitComplete : AMessage, IRoamingMessage
+    {
+        public static C2M_InitComplete Create(bool autoReturn = true)
+        {
+            var c2M_InitComplete = MessageObjectPool<C2M_InitComplete>.Rent();
+            c2M_InitComplete.AutoReturn = autoReturn;
+            
+            if (!autoReturn)
+            {
+                c2M_InitComplete.SetIsPool(false);
+            }
+            
+            return c2M_InitComplete;
+        }
+        
+        public void Return()
+        {
+            if (!AutoReturn)
+            {
+                SetIsPool(true);
+                AutoReturn = true;
+            }
+            else if (!IsPool())
+            {
+                return;
+            }
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (!IsPool()) return; 
+            MessageObjectPool<C2M_InitComplete>.Return(this);
+        }
+        public uint OpCode() { return OuterOpcode.C2M_InitComplete; } 
+        [ProtoIgnore]
+        public int RouteType => Fantasy.RoamingType.MapRoamingType;
+    }
+    /// <summary>
+    /// Map服务器通知客户端创建新的Player
+    /// </summary>
+    [Serializable]
+    [ProtoContract]
+    public partial class M2C_PlayerCreate : AMessage, IRoamingMessage
+    {
+        public static M2C_PlayerCreate Create(bool autoReturn = true)
+        {
+            var m2C_PlayerCreate = MessageObjectPool<M2C_PlayerCreate>.Rent();
+            m2C_PlayerCreate.AutoReturn = autoReturn;
+            
+            if (!autoReturn)
+            {
+                m2C_PlayerCreate.SetIsPool(false);
+            }
+            
+            return m2C_PlayerCreate;
+        }
+        
+        public void Return()
+        {
+            if (!AutoReturn)
+            {
+                SetIsPool(true);
+                AutoReturn = true;
+            }
+            else if (!IsPool())
+            {
+                return;
+            }
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (!IsPool()) return; 
+            if (Player != null)
+            {
+                Player.Dispose();
+                Player = null;
+            }
+            IsSelf = default;
+            MessageObjectPool<M2C_PlayerCreate>.Return(this);
+        }
+        public uint OpCode() { return OuterOpcode.M2C_PlayerCreate; } 
+        [ProtoIgnore]
+        public int RouteType => Fantasy.RoamingType.MapRoamingType;
+        [ProtoMember(1)]
+        public PlayerInfo Player { get; set; }
+        [ProtoMember(2)]
+        public bool IsSelf { get; set; }
+    }
+    /// <summary>
+    /// Map通知客户端有Player离开
+    /// </summary>
+    [Serializable]
+    [ProtoContract]
+    public partial class M2C_PlayerLeave : AMessage, IRoamingMessage
+    {
+        public static M2C_PlayerLeave Create(bool autoReturn = true)
+        {
+            var m2C_PlayerLeave = MessageObjectPool<M2C_PlayerLeave>.Rent();
+            m2C_PlayerLeave.AutoReturn = autoReturn;
+            
+            if (!autoReturn)
+            {
+                m2C_PlayerLeave.SetIsPool(false);
+            }
+            
+            return m2C_PlayerLeave;
+        }
+        
+        public void Return()
+        {
+            if (!AutoReturn)
+            {
+                SetIsPool(true);
+                AutoReturn = true;
+            }
+            else if (!IsPool())
+            {
+                return;
+            }
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (!IsPool()) return; 
+            PlayerId = default;
+            MessageObjectPool<M2C_PlayerLeave>.Return(this);
+        }
+        public uint OpCode() { return OuterOpcode.M2C_PlayerLeave; } 
+        [ProtoIgnore]
+        public int RouteType => Fantasy.RoamingType.MapRoamingType;
+        [ProtoMember(1)]
+        public long PlayerId { get; set; }
+    }
+    /// <summary>
+    /// Player信息
+    /// </summary>
+    [Serializable]
+    [ProtoContract]
+    public partial class PlayerInfo : AMessage, IDisposable
+    {
+        public static PlayerInfo Create(bool autoReturn = true)
+        {
+            var playerInfo = MessageObjectPool<PlayerInfo>.Rent();
+            playerInfo.AutoReturn = autoReturn;
+            
+            if (!autoReturn)
+            {
+                playerInfo.SetIsPool(false);
+            }
+            
+            return playerInfo;
+        }
+        
+        public void Return()
+        {
+            if (!AutoReturn)
+            {
+                SetIsPool(true);
+                AutoReturn = true;
+            }
+            else if (!IsPool())
+            {
+                return;
+            }
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (!IsPool()) return; 
+            PlayerId = default;
+            Name = default;
+            if (Pos != null)
+            {
+                Pos.Dispose();
+                Pos = null;
+            }
+            MessageObjectPool<PlayerInfo>.Return(this);
+        }
+        [ProtoMember(1)]
+        public long PlayerId { get; set; }
+        [ProtoMember(2)]
+        public string Name { get; set; }
+        [ProtoMember(3)]
+        public Position Pos { get; set; }
+    }
+    /// <summary>
+    /// 坐标信息
+    /// </summary>
+    [Serializable]
+    [ProtoContract]
+    public partial class Position : AMessage, IDisposable
+    {
+        public static Position Create(bool autoReturn = true)
+        {
+            var position = MessageObjectPool<Position>.Rent();
+            position.AutoReturn = autoReturn;
+            
+            if (!autoReturn)
+            {
+                position.SetIsPool(false);
+            }
+            
+            return position;
+        }
+        
+        public void Return()
+        {
+            if (!AutoReturn)
+            {
+                SetIsPool(true);
+                AutoReturn = true;
+            }
+            else if (!IsPool())
+            {
+                return;
+            }
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (!IsPool()) return; 
+            X = default;
+            Y = default;
+            Z = default;
+            MessageObjectPool<Position>.Return(this);
+        }
+        [ProtoMember(1)]
+        public float X { get; set; }
+        [ProtoMember(2)]
+        public float Y { get; set; }
+        [ProtoMember(3)]
+        public float Z { get; set; }
+    }
 }

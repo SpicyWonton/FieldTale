@@ -1,3 +1,4 @@
+using Fantasy;
 using GameFramework.Fsm;
 using GameFramework.Procedure;
 using UnityGameFramework.Runtime;
@@ -15,7 +16,8 @@ namespace FieldTale.HotUpdate
         {
             base.OnEnter(procedureOwner);
 
-            FrameworkRoot.Entity.ShowEntity(10000, typeof(Player), "Assets/GameRes/Entities/Player.prefab", "Entity", 0, new PlayerData(10000, 1, 10f));
+            // 通知服务器初始化资源完成，可以接收服务器推送的消息
+            Fantasy.Runtime.Session.C2M_InitComplete();
         }
 
         protected override void OnUpdate(IFsm<IProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)

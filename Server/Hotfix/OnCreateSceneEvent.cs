@@ -28,11 +28,11 @@ public sealed class OnCreateSceneEvent : AsyncEventSystem<OnCreateScene>
             //     _addressableSceneRunTimeId = scene.RuntimeId;
             //     break;
             // }
-            // case SceneType.Map:
-            // {
-            //     scene.AddComponent<PlayerUnitManageComponent>();
-            //     break;
-            // }
+            case SceneType.Map:
+            {
+                scene.AddComponent<PlayerManageComponent>();
+                break;
+            }
             // case SceneType.Chat:
             // {
             //     break;
