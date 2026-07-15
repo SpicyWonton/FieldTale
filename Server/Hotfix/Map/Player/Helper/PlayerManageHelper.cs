@@ -96,25 +96,59 @@ public static class PlayerManageHelper
     /// <param name="scene"></param>
     /// <param name="playerId"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void RemovePlayer(Scene scene, long playerId)
+    public static void RemovePlayer(Scene scene, long playerId, ERemovePlayerNotify notify = ERemovePlayerNotify.SyncEveryone)
     {
-        // var playerUnitManageComponent = scene.GetComponent<PlayerUnitManageComponent>();
-        //
-        // switch (notify)
-        // {
-        //     case RemovePlayerUnitNotify.NoNotification:
-        //     {
-        //         return;
-        //     }
-        //     case RemovePlayerUnitNotify.SyncSelf:
-        //     {
-        //         return;
-        //     }
-        //     case RemovePlayerUnitNotify.SyncEveryone:
-        //     {
-        //         return;
-        //     }
-        // }
+        var playerManageComponent = scene.GetComponent<PlayerManageComponent>();
+        if (!playerManageComponent.Players.Remove(playerId, out var player))
+        {
+            return;
+        }
+
+        try
+        {
+            switch (notify)
+            {
+                case ERemovePlayerNotify.NoNotification:
+                {
+                    break;
+                }
+                case ERemovePlayerNotify.SyncSelf:
+                {
+                    if (player.TryGetLinkTerminus(out var linkTerminus))
+                    {
+                        var playerLeaveMessage = M2C_PlayerLeave.Create();
+                        playerLeaveMessage.PlayerId = playerId;
+                        linkTerminus.Send(playerLeaveMessage);
+                    }
+
+                    break;
+                }
+                case ERemovePlayerNotify.SyncEveryone:
+                {
+                    var playerLeaveMessage = M2C_PlayerLeave.Create(false);
+                    playerLeaveMessage.PlayerId = playerId;
+
+                    try
+                    {
+                        BroadcastToAllPlayers(scene, playerLeaveMessage, playerManageComponent);
+                    }
+                    finally
+                    {
+                        playerLeaveMessage.Return();
+                    }
+
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentOutOfRangeException(nameof(notify), notify, null);
+                }
+            }
+        }
+        finally
+        {
+            player.Dispose();
+        }
     }
 
     /// <summary>
