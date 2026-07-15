@@ -9,10 +9,13 @@ namespace FieldTale.HotUpdate
         [SerializeField]
         private readonly float m_Speed = 0f;
 
-        public PlayerData(int entityId, int typeId, float speed) : base(entityId, typeId)
+        public PlayerData(int entityId, int typeId, float speed, bool isSelf = false) : base(entityId, typeId)
         {
             m_Speed = speed;
+            IsSelf = isSelf;
         }
+
+        public bool IsSelf { get; }
 
         public float Speed
         {

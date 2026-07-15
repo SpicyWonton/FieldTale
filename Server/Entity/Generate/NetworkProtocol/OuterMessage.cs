@@ -211,7 +211,108 @@ namespace Fantasy
     }
     /// <summary>
     /// Map通知客户端有Player离开
+    /// 客户端上报自己的最新位置，玩家身份由服务器当前连接确定
     /// </summary>
+    [Serializable]
+    [ProtoContract]
+    public partial class C2M_PlayerMove : AMessage, IRoamingMessage
+    {
+        public static C2M_PlayerMove Create(bool autoReturn = true)
+        {
+            var c2M_PlayerMove = MessageObjectPool<C2M_PlayerMove>.Rent();
+            c2M_PlayerMove.AutoReturn = autoReturn;
+            
+            if (!autoReturn)
+            {
+                c2M_PlayerMove.SetIsPool(false);
+            }
+            
+            return c2M_PlayerMove;
+        }
+        
+        public void Return()
+        {
+            if (!AutoReturn)
+            {
+                SetIsPool(true);
+                AutoReturn = true;
+            }
+            else if (!IsPool())
+            {
+                return;
+            }
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (!IsPool()) return; 
+            if (Pos != null)
+            {
+                Pos.Dispose();
+                Pos = null;
+            }
+            MessageObjectPool<C2M_PlayerMove>.Return(this);
+        }
+        public uint OpCode() { return OuterOpcode.C2M_PlayerMove; } 
+        [ProtoIgnore]
+        public int RouteType => Fantasy.RoamingType.MapRoamingType;
+        [ProtoMember(1)]
+        public Position Pos { get; set; }
+    }
+    /// <summary>
+    /// Map服务器广播玩家位置给场景内其他客户端
+    /// </summary>
+    [Serializable]
+    [ProtoContract]
+    public partial class M2C_PlayerMove : AMessage, IRoamingMessage
+    {
+        public static M2C_PlayerMove Create(bool autoReturn = true)
+        {
+            var m2C_PlayerMove = MessageObjectPool<M2C_PlayerMove>.Rent();
+            m2C_PlayerMove.AutoReturn = autoReturn;
+            
+            if (!autoReturn)
+            {
+                m2C_PlayerMove.SetIsPool(false);
+            }
+            
+            return m2C_PlayerMove;
+        }
+        
+        public void Return()
+        {
+            if (!AutoReturn)
+            {
+                SetIsPool(true);
+                AutoReturn = true;
+            }
+            else if (!IsPool())
+            {
+                return;
+            }
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (!IsPool()) return; 
+            PlayerId = default;
+            if (Pos != null)
+            {
+                Pos.Dispose();
+                Pos = null;
+            }
+            MessageObjectPool<M2C_PlayerMove>.Return(this);
+        }
+        public uint OpCode() { return OuterOpcode.M2C_PlayerMove; } 
+        [ProtoIgnore]
+        public int RouteType => Fantasy.RoamingType.MapRoamingType;
+        [ProtoMember(1)]
+        public long PlayerId { get; set; }
+        [ProtoMember(2)]
+        public Position Pos { get; set; }
+    }
     [Serializable]
     [ProtoContract]
     public partial class M2C_PlayerLeave : AMessage, IRoamingMessage

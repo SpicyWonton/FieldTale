@@ -34,6 +34,17 @@ message M2C_PlayerCreate // IRoamingMessage,MapRoamingType
 	PlayerInfo Player = 1;	// 玩家信息
 	bool IsSelf = 2;	    // 是否是自己
 }
+/// 客户端上报自己的最新位置，玩家身份由服务器当前连接确定
+message C2M_PlayerMove // IRoamingMessage,MapRoamingType
+{
+	Position Pos = 1;
+}
+/// Map服务器广播玩家位置给场景内其他客户端
+message M2C_PlayerMove // IRoamingMessage,MapRoamingType
+{
+	int64 PlayerId = 1;
+	Position Pos = 2;
+}
 /// Map通知客户端有Player离开
 message M2C_PlayerLeave // IRoamingMessage,MapRoamingType
 {

@@ -46,6 +46,31 @@ namespace Fantasy
 			session.Send(M2C_PlayerCreate_message);
 		}
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void C2M_PlayerMove(this Session session, C2M_PlayerMove C2M_PlayerMove_message)
+		{
+			session.Send(C2M_PlayerMove_message);
+		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void C2M_PlayerMove(this Session session, Position pos)
+		{
+			using var C2M_PlayerMove_message = Fantasy.C2M_PlayerMove.Create();
+			C2M_PlayerMove_message.Pos = pos;
+			session.Send(C2M_PlayerMove_message);
+		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void M2C_PlayerMove(this Session session, M2C_PlayerMove M2C_PlayerMove_message)
+		{
+			session.Send(M2C_PlayerMove_message);
+		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void M2C_PlayerMove(this Session session, long playerId, Position pos)
+		{
+			using var M2C_PlayerMove_message = Fantasy.M2C_PlayerMove.Create();
+			M2C_PlayerMove_message.PlayerId = playerId;
+			M2C_PlayerMove_message.Pos = pos;
+			session.Send(M2C_PlayerMove_message);
+		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void M2C_PlayerLeave(this Session session, M2C_PlayerLeave M2C_PlayerLeave_message)
 		{
 			session.Send(M2C_PlayerLeave_message);

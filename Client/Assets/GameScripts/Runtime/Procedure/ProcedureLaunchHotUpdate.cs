@@ -48,6 +48,19 @@ namespace FieldTale
 
         private void LaunchHotUpdate(Assembly hotUpdateAssembly)
         {
+            // HybridCLR loads the hot-update assembly dynamically, so its generated
+            // Fantasy registrars must be initialized explicitly before any message is used.
+            string assemblyInitializerTypeName = $"Fantasy.Generated.{hotUpdateAssembly.GetName().Name.Replace('.', '_')}_AssemblyInitializer";
+            Type assemblyInitializer = hotUpdateAssembly.GetType(assemblyInitializerTypeName);
+            MethodInfo initializeMethod = assemblyInitializer?.GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static);
+            if (initializeMethod == null)
+            {
+                Log.Error("Hot-update Fantasy assembly initializer was not found: {0}", assemblyInitializerTypeName);
+                return;
+            }
+
+            initializeMethod.Invoke(null, null);
+
             Type hotUpdateEntry = hotUpdateAssembly.GetType(HotUpdateEntryTypeName);
             hotUpdateEntry.GetMethod("Start").Invoke(null, null);
         }

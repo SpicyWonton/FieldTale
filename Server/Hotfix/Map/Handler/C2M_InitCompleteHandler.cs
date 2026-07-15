@@ -20,9 +20,10 @@ public sealed class C2M_InitCompleteHandler : Roaming<Player, C2M_InitComplete>
         var playerManageComponent = player.Scene.GetComponent<PlayerManageComponent>();
         
         // 1. 同步场景中其他单位给新玩家
-        PlayerManageHelper.SyncOtherPlayers(linkTerminus, player);
-        // 2. 发送自己的单位给客户端
+        // Send the local player first so its entity starts loading before remote players.
         PlayerManageHelper.SendPlayerCreate(linkTerminus, player, true);
+        // Sync the other players after the local player has been announced.
+        PlayerManageHelper.SyncOtherPlayers(linkTerminus, player);
         // 3. 将新玩家广播给场景中的其他人
         PlayerManageHelper.BroadcastPlayerCreate(scene, playerInfo, playerId, playerManageComponent);
         

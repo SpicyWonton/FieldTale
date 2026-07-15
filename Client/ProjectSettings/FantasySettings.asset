@@ -19,3 +19,4 @@ MonoBehaviour:
   includeAssembly:
   - Assembly-CSharp
   - Fantasy.Unity
+  - FieldTale.HotUpdate

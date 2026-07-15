@@ -17,7 +17,6 @@ namespace FieldTale.Editor
         public static void PrepareHotUpdateDll()
         {
             BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
-            CompileDllCommand.CompileDll(buildTarget, EditorUserBuildSettings.development);
 
             string hotUpdateDllOutputDir = SettingsUtil.GetHotUpdateDllsOutputDirByTarget(buildTarget);
             for (int i = 0; i < HotUpdateDllNames.Length; i++)
