@@ -16,7 +16,10 @@ public static class PlayerFactory
         player.Name = accountName;
         // 挂载组件
         var transformComponent = player.AddComponent<TransformComponent>();
-        transformComponent.Position = new Vector3(0, 0, 0);
+        transformComponent.Position = new Vector3(
+            Random.Shared.Next(-10, 11),
+            Random.Shared.Next(-5, 6),
+            0);
         player.Transform = transformComponent;
         return player;
     }

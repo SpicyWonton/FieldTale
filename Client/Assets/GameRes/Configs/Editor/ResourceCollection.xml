@@ -5,6 +5,7 @@
       <Resource Name="DataTables" LoadType="0" Packed="False" />
       <Resource Name="Entities" LoadType="0" Packed="False" />
       <Resource Name="HotUpdate" LoadType="0" Packed="False" />
+      <Resource Name="MetaDlls" LoadType="0" Packed="False" />
       <Resource Name="Scenes" LoadType="0" Packed="True" />
       <Resource Name="UIForms" LoadType="0" Packed="False" />
     </Resources>
@@ -12,9 +13,16 @@
       <Asset Guid="19edd8652464e3e4c9612d9280f3034a" ResourceName="DataTables" />
       <Asset Guid="2cda990e2423bbf4892e6590ba056729" ResourceName="Scenes" />
       <Asset Guid="323733a3fc1667c4d9e349385b18ac6d" ResourceName="HotUpdate" />
+      <Asset Guid="41c380b85b92a8c468a624fd9d5aa4c7" ResourceName="MetaDlls" />
+      <Asset Guid="5d40536edca3fa14bbedb804a30d819d" ResourceName="MetaDlls" />
+      <Asset Guid="93ebe283d524cf245a172b026550011f" ResourceName="MetaDlls" />
+      <Asset Guid="9817f53be50d4384bbe9f4af6d5fcff2" ResourceName="MetaDlls" />
+      <Asset Guid="ad8abcd0fcad26c4c984d9956206310f" ResourceName="MetaDlls" />
       <Asset Guid="b2c5de3eada5943a0bedb4f88f7cdb07" ResourceName="Entities" />
       <Asset Guid="bede41822ba641b4d8cb2102a0547fa9" ResourceName="Scenes" />
       <Asset Guid="caf5dd5fd15eecc4d8a87f5f24929f33" ResourceName="UIForms" />
+      <Asset Guid="e519c5e5ca51a0e42af10f4876baab9c" ResourceName="MetaDlls" />
+      <Asset Guid="f5f84adc88c19cb49ba647188174009e" ResourceName="MetaDlls" />
     </Assets>
   </ResourceCollection>
 </UnityGameFramework>

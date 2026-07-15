@@ -18,5 +18,10 @@ namespace FieldTale.HotUpdate
         {
             return Utility.Text.Format("Assets/GameRes/UI/UIForms/{0}/{1}.prefab", folder, uiName);
         }
+
+        public static string GetDllAsset(string dllName)
+        {
+            return Utility.Text.Format("Assets/GameRes/Dlls/{0}.bytes", dllName);
+        }
     }
 }

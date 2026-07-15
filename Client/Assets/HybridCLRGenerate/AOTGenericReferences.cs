@@ -40,21 +40,27 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ArraySortHelper<object>
 	// System.Collections.Generic.Comparer<object>
 	// System.Collections.Generic.Dictionary.Enumerator<int,object>
+	// System.Collections.Generic.Dictionary.Enumerator<long,int>
 	// System.Collections.Generic.Dictionary.Enumerator<long,object>
 	// System.Collections.Generic.Dictionary.Enumerator<object,object>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<int,object>
+	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<long,int>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<long,object>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<object,object>
 	// System.Collections.Generic.Dictionary.KeyCollection<int,object>
+	// System.Collections.Generic.Dictionary.KeyCollection<long,int>
 	// System.Collections.Generic.Dictionary.KeyCollection<long,object>
 	// System.Collections.Generic.Dictionary.KeyCollection<object,object>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<int,object>
+	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<long,int>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<long,object>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<object,object>
 	// System.Collections.Generic.Dictionary.ValueCollection<int,object>
+	// System.Collections.Generic.Dictionary.ValueCollection<long,int>
 	// System.Collections.Generic.Dictionary.ValueCollection<long,object>
 	// System.Collections.Generic.Dictionary.ValueCollection<object,object>
 	// System.Collections.Generic.Dictionary<int,object>
+	// System.Collections.Generic.Dictionary<long,int>
 	// System.Collections.Generic.Dictionary<long,object>
 	// System.Collections.Generic.Dictionary<object,object>
 	// System.Collections.Generic.EqualityComparer<int>
@@ -64,16 +70,19 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.HashSet<object>
 	// System.Collections.Generic.HashSetEqualityComparer<object>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<int,object>>
+	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<long,int>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<long,object>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.ICollection<object>
 	// System.Collections.Generic.IComparer<object>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int,object>>
+	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<long,int>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<long,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IEnumerable<int>
 	// System.Collections.Generic.IEnumerable<object>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<int,object>>
+	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<long,int>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<long,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IEnumerator<int>
@@ -83,6 +92,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEqualityComparer<object>
 	// System.Collections.Generic.IList<object>
 	// System.Collections.Generic.KeyValuePair<int,object>
+	// System.Collections.Generic.KeyValuePair<long,int>
 	// System.Collections.Generic.KeyValuePair<long,object>
 	// System.Collections.Generic.KeyValuePair<object,object>
 	// System.Collections.Generic.LinkedList.Enumerator<object>
