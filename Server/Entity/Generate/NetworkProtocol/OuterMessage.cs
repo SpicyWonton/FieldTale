@@ -210,8 +210,7 @@ namespace Fantasy
         public bool IsSelf { get; set; }
     }
     /// <summary>
-    /// Map通知客户端有Player离开
-    /// 客户端上报自己的最新位置，玩家身份由服务器当前连接确定
+    /// 客户端上报移动输入，玩家身份由服务器当前连接确定
     /// </summary>
     [Serializable]
     [ProtoContract]
@@ -247,21 +246,23 @@ namespace Fantasy
         public void Dispose()
         {
             if (!IsPool()) return; 
-            if (Pos != null)
-            {
-                Pos.Dispose();
-                Pos = null;
-            }
+            ClientTick = default;
+            MoveX = default;
+            MoveY = default;
             MessageObjectPool<C2M_PlayerMove>.Return(this);
         }
         public uint OpCode() { return OuterOpcode.C2M_PlayerMove; } 
         [ProtoIgnore]
         public int RouteType => Fantasy.RoamingType.MapRoamingType;
         [ProtoMember(1)]
-        public Position Pos { get; set; }
+        public uint ClientTick { get; set; }
+        [ProtoMember(2)]
+        public int MoveX { get; set; }
+        [ProtoMember(3)]
+        public int MoveY { get; set; }
     }
     /// <summary>
-    /// Map服务器广播玩家位置给场景内其他客户端
+    /// Map服务器广播玩家权威移动状态
     /// </summary>
     [Serializable]
     [ProtoContract]
@@ -303,6 +304,8 @@ namespace Fantasy
                 Pos.Dispose();
                 Pos = null;
             }
+            ServerTick = default;
+            LastProcessedClientTick = default;
             MessageObjectPool<M2C_PlayerMove>.Return(this);
         }
         public uint OpCode() { return OuterOpcode.M2C_PlayerMove; } 
@@ -312,7 +315,14 @@ namespace Fantasy
         public long PlayerId { get; set; }
         [ProtoMember(2)]
         public Position Pos { get; set; }
+        [ProtoMember(3)]
+        public uint ServerTick { get; set; }
+        [ProtoMember(4)]
+        public uint LastProcessedClientTick { get; set; }
     }
+    /// <summary>
+    /// Map通知客户端有Player离开
+    /// </summary>
     [Serializable]
     [ProtoContract]
     public partial class M2C_PlayerLeave : AMessage, IRoamingMessage

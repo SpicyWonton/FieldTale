@@ -34,16 +34,20 @@ message M2C_PlayerCreate // IRoamingMessage,MapRoamingType
 	PlayerInfo Player = 1;	// 玩家信息
 	bool IsSelf = 2;	    // 是否是自己
 }
-/// 客户端上报自己的最新位置，玩家身份由服务器当前连接确定
+/// 客户端上报移动输入，玩家身份由服务器当前连接确定
 message C2M_PlayerMove // IRoamingMessage,MapRoamingType
 {
-	Position Pos = 1;
+	uint32 ClientTick = 1;	// 客户端递增的固定模拟Tick，用于确认和输入重放
+	int32 MoveX = 2;		// 水平方向：-1、0、1
+	int32 MoveY = 3;		// 垂直方向：-1、0、1
 }
-/// Map服务器广播玩家位置给场景内其他客户端
+/// Map服务器广播玩家权威移动状态
 message M2C_PlayerMove // IRoamingMessage,MapRoamingType
 {
 	int64 PlayerId = 1;
 	Position Pos = 2;
+	uint32 ServerTick = 3;				// 服务器权威模拟 Tick
+	uint32 LastProcessedClientTick = 4;	// 仅本人使用：服务器已处理的最后输入 Tick
 }
 /// Map通知客户端有Player离开
 message M2C_PlayerLeave // IRoamingMessage,MapRoamingType

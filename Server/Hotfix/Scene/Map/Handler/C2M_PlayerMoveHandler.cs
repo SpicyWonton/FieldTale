@@ -8,36 +8,15 @@ public sealed class C2M_PlayerMoveHandler : Roaming<Player, C2M_PlayerMove>
 {
     protected override async FTask Run(Player player, C2M_PlayerMove message)
     {
-        if (message.Pos == null)
+        if (message.ClientTick <= player.LastProcessedClientTick)
         {
             await FTask.CompletedTask;
             return;
         }
 
-        message.Pos.Transform(ref player.Transform.Position);
-
-        var moveMessage = M2C_PlayerMove.Create(false);
-        moveMessage.PlayerId = player.Id;
-        moveMessage.Pos = Position.Create();
-        moveMessage.Pos.Transform(player.Transform.Position);
-
-        try
-        {
-            var players = player.Scene.GetComponent<PlayerManageComponent>().Players;
-            foreach (var (playerId, otherPlayer) in players)
-            {
-                if (playerId == player.Id || !otherPlayer.TryGetLinkTerminus(out var linkTerminus))
-                {
-                    continue;
-                }
-
-                linkTerminus.Send(moveMessage);
-            }
-        }
-        finally
-        {
-            moveMessage.Return();
-        }
+        player.LastProcessedClientTick = message.ClientTick;
+        player.MoveX = Math.Clamp(message.MoveX, -1, 1);
+        player.MoveY = Math.Clamp(message.MoveY, -1, 1);
 
         await FTask.CompletedTask;
     }
