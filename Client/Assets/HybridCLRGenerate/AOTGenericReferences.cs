@@ -31,13 +31,19 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// LightProto.Parser.ICollectionReader<object>
 	// LightProto.Parser.MessageWrapper.ProtoReader<object>
 	// LightProto.Parser.MessageWrapper.ProtoWriter<object>
+	// System.Action<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Action<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Action<byte>
 	// System.Action<object,object>
 	// System.Action<object>
 	// System.ArraySegment.Enumerator<byte>
 	// System.ArraySegment<byte>
 	// System.ByReference<byte>
+	// System.Collections.Generic.ArraySortHelper<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Collections.Generic.ArraySortHelper<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Collections.Generic.ArraySortHelper<object>
+	// System.Collections.Generic.Comparer<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Collections.Generic.Comparer<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Collections.Generic.Comparer<object>
 	// System.Collections.Generic.Dictionary.Enumerator<int,object>
 	// System.Collections.Generic.Dictionary.Enumerator<long,int>
@@ -69,18 +75,26 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.HashSet.Enumerator<object>
 	// System.Collections.Generic.HashSet<object>
 	// System.Collections.Generic.HashSetEqualityComparer<object>
+	// System.Collections.Generic.ICollection<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Collections.Generic.ICollection<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<int,object>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<long,int>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<long,object>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.ICollection<object>
+	// System.Collections.Generic.IComparer<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Collections.Generic.IComparer<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Collections.Generic.IComparer<object>
+	// System.Collections.Generic.IEnumerable<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Collections.Generic.IEnumerable<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<long,int>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<long,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IEnumerable<int>
 	// System.Collections.Generic.IEnumerable<object>
+	// System.Collections.Generic.IEnumerator<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Collections.Generic.IEnumerator<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<int,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<long,int>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<long,object>>
@@ -90,6 +104,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEqualityComparer<int>
 	// System.Collections.Generic.IEqualityComparer<long>
 	// System.Collections.Generic.IEqualityComparer<object>
+	// System.Collections.Generic.IList<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Collections.Generic.IList<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Collections.Generic.IList<object>
 	// System.Collections.Generic.KeyValuePair<int,object>
 	// System.Collections.Generic.KeyValuePair<long,int>
@@ -98,8 +114,14 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.LinkedList.Enumerator<object>
 	// System.Collections.Generic.LinkedList<object>
 	// System.Collections.Generic.LinkedListNode<object>
+	// System.Collections.Generic.List.Enumerator<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Collections.Generic.List.Enumerator<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Collections.Generic.List.Enumerator<object>
+	// System.Collections.Generic.List<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Collections.Generic.List<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Collections.Generic.List<object>
+	// System.Collections.Generic.ObjectComparer<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Collections.Generic.ObjectComparer<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Collections.Generic.ObjectComparer<object>
 	// System.Collections.Generic.ObjectEqualityComparer<int>
 	// System.Collections.Generic.ObjectEqualityComparer<long>
@@ -108,13 +130,19 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.Queue<object>
 	// System.Collections.Generic.Stack.Enumerator<object>
 	// System.Collections.Generic.Stack<object>
+	// System.Collections.ObjectModel.ReadOnlyCollection<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Collections.ObjectModel.ReadOnlyCollection<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Collections.ObjectModel.ReadOnlyCollection<object>
+	// System.Comparison<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Comparison<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Comparison<object>
 	// System.EventHandler<object>
 	// System.Func<object,object>
 	// System.Func<object,uint,object,object>
 	// System.Func<object>
 	// System.Nullable<uint>
+	// System.Predicate<FieldTale.HotUpdate.Player.InputCommand>
+	// System.Predicate<FieldTale.HotUpdate.Player.NetworkSnapshot>
 	// System.Predicate<object>
 	// System.ReadOnlySpan<byte>
 	// System.Span<byte>

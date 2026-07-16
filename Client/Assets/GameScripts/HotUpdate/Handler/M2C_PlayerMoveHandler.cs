@@ -9,16 +9,9 @@ namespace FieldTale.HotUpdate
     {
         protected override async FTask Run(Session session, Fantasy.M2C_PlayerMove message)
         {
-            if (message?.Pos == null)
-            {
-                UnityGameFramework.Runtime.Log.Info("[Network][M2C_PlayerMove] message or Pos is null.");
-            }
-            else
-            {
-                UnityGameFramework.Runtime.Log.Info($"[Network][M2C_PlayerMove] PlayerId={message.PlayerId}, Pos=({message.Pos.X}, {message.Pos.Y}, {message.Pos.Z})");
-            }
             if (message == null || message.Pos == null)
             {
+                UnityGameFramework.Runtime.Log.Warning("[Network][M2C_PlayerMove] message or Pos is null.");
                 await FTask.CompletedTask;
                 return;
             }
@@ -28,7 +21,10 @@ namespace FieldTale.HotUpdate
             Player player = entity == null ? null : entity.Logic as Player;
             if (player != null)
             {
-                player.SetNetworkPosition(new Vector3(message.Pos.X, message.Pos.Y, message.Pos.Z));
+                player.ReceiveNetworkSnapshot(
+                    new Vector3(message.Pos.X, message.Pos.Y, message.Pos.Z),
+                    message.ServerTick,
+                    message.LastProcessedClientTick);
             }
 
             await FTask.CompletedTask;

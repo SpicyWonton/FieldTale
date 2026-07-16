@@ -51,10 +51,12 @@ namespace Fantasy
 			session.Send(C2M_PlayerMove_message);
 		}
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void C2M_PlayerMove(this Session session, Position pos)
+		public static void C2M_PlayerMove(this Session session, uint clientTick, int moveX, int moveY)
 		{
 			using var C2M_PlayerMove_message = Fantasy.C2M_PlayerMove.Create();
-			C2M_PlayerMove_message.Pos = pos;
+			C2M_PlayerMove_message.ClientTick = clientTick;
+			C2M_PlayerMove_message.MoveX = moveX;
+			C2M_PlayerMove_message.MoveY = moveY;
 			session.Send(C2M_PlayerMove_message);
 		}
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -63,11 +65,13 @@ namespace Fantasy
 			session.Send(M2C_PlayerMove_message);
 		}
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void M2C_PlayerMove(this Session session, long playerId, Position pos)
+		public static void M2C_PlayerMove(this Session session, long playerId, Position pos, uint serverTick, uint lastProcessedClientTick)
 		{
 			using var M2C_PlayerMove_message = Fantasy.M2C_PlayerMove.Create();
 			M2C_PlayerMove_message.PlayerId = playerId;
 			M2C_PlayerMove_message.Pos = pos;
+			M2C_PlayerMove_message.ServerTick = serverTick;
+			M2C_PlayerMove_message.LastProcessedClientTick = lastProcessedClientTick;
 			session.Send(M2C_PlayerMove_message);
 		}
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
