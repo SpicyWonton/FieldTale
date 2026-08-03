@@ -79,6 +79,31 @@ namespace UnityGameFramework.Runtime
         }
 
         /// <summary>
+        /// 轮询所有游戏框架组件。
+        /// </summary>
+        /// <param name=elapseSeconds>逻辑流逝时间，以秒为单位。</param>
+        /// <param name=realElapseSeconds>真实流逝时间，以秒为单位。</param>
+        internal static void Update(float elapseSeconds, float realElapseSeconds)
+        {
+            LinkedListNode<GameFrameworkComponent> current = s_GameFrameworkComponents.First;
+            while (current != null)
+            {
+                LinkedListNode<GameFrameworkComponent> next = current.Next;
+                GameFrameworkComponent gameFrameworkComponent = current.Value;
+                if (gameFrameworkComponent == null)
+                {
+                    s_GameFrameworkComponents.Remove(current);
+                }
+                else
+                {
+                    gameFrameworkComponent.Tick(elapseSeconds, realElapseSeconds);
+                }
+
+                current = next;
+            }
+        }
+
+        /// <summary>
         /// 关闭游戏框架。
         /// </summary>
         /// <param name="shutdownType">关闭游戏框架类型。</param>
@@ -142,6 +167,25 @@ namespace UnityGameFramework.Runtime
             }
 
             s_GameFrameworkComponents.AddLast(gameFrameworkComponent);
+        }
+
+        /// <summary>
+        /// 注销游戏框架组件。
+        /// </summary>
+        /// <param name=gameFrameworkComponent>要注销的游戏框架组件。</param>
+        internal static void UnregisterComponent(GameFrameworkComponent gameFrameworkComponent)
+        {
+            LinkedListNode<GameFrameworkComponent> current = s_GameFrameworkComponents.First;
+            while (current != null)
+            {
+                if (ReferenceEquals(current.Value, gameFrameworkComponent))
+                {
+                    s_GameFrameworkComponents.Remove(current);
+                    return;
+                }
+
+                current = current.Next;
+            }
         }
     }
 }

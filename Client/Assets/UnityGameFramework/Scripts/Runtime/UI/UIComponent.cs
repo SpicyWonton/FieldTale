@@ -224,7 +224,7 @@ namespace UnityGameFramework.Runtime
             }
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             m_IsShutdown = true;
             CloseAllLoadedUIForms();
@@ -232,6 +232,7 @@ namespace UnityGameFramework.Runtime
             m_UIFormsBeingLoaded.Clear();
             m_UIFormsToReleaseOnLoad.Clear();
             m_RecycleQueue.Clear();
+            base.OnDestroy();
         }
 
         /// <summary>
@@ -239,7 +240,7 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         /// <param name="elapseSeconds">逻辑流逝时间，以秒为单位。</param>
         /// <param name="realElapseSeconds">真实流逝时间，以秒为单位。</param>
-        protected override void UpdateManager(float elapseSeconds, float realElapseSeconds)
+        internal override void Tick(float elapseSeconds, float realElapseSeconds)
         {
             // 界面关闭时会进入回收队列，下一帧回收掉
             while (m_RecycleQueue.Count > 0)

@@ -228,7 +228,10 @@ namespace UnityGameFramework.Runtime
 
         private void Update()
         {
-            GameFrameworkEntry.Update(Time.deltaTime, Time.unscaledDeltaTime);
+            float elapseSeconds = Time.deltaTime;
+            float realElapseSeconds = Time.unscaledDeltaTime;
+            GameFrameworkEntry.Update(elapseSeconds, realElapseSeconds);
+            GameEntry.Update(elapseSeconds, realElapseSeconds);
         }
 
         private void OnApplicationQuit()
@@ -239,9 +242,10 @@ namespace UnityGameFramework.Runtime
             StopAllCoroutines();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             GameFrameworkEntry.Shutdown();
+            base.OnDestroy();
         }
 
         /// <summary>

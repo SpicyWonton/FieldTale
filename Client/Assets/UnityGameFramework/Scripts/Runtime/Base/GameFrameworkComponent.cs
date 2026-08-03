@@ -23,13 +23,19 @@ namespace UnityGameFramework.Runtime
         }
 
         /// <summary>
-        /// 游戏框架模块轮询。
+        /// 游戏框架组件销毁。
         /// </summary>
-        /// <param name="elapseSeconds">逻辑流逝时间，以秒为单位。</param>
-        /// <param name="realElapseSeconds">真实流逝时间，以秒为单位。</param>
-        protected virtual void UpdateManager(float elapseSeconds, float realElapseSeconds)
+        protected virtual void OnDestroy()
         {
-            
+            GameEntry.UnregisterComponent(this);
+        }
+
+        internal virtual void Tick(float elapseSeconds, float realElapseSeconds)
+        {
+            if (!isActiveAndEnabled)
+            {
+                return;
+            }
         }
     }
 }
