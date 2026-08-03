@@ -136,7 +136,7 @@ namespace UnityGameFramework.Editor
             m_InstanceExpireTime = serializedObject.FindProperty("m_InstanceExpireTime");
             m_InstancePriority = serializedObject.FindProperty("m_InstancePriority");
             m_InstanceRoot = serializedObject.FindProperty("m_InstanceRoot");
-            m_UIGroups = serializedObject.FindProperty("m_UIGroups");
+            m_UIGroups = serializedObject.FindProperty("m_UIGroupConfigs");
 
             m_UIFormHelperInfo.Init(serializedObject);
             m_UIGroupHelperInfo.Init(serializedObject);

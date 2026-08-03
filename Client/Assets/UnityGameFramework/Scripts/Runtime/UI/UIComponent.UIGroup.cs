@@ -13,7 +13,7 @@ namespace UnityGameFramework.Runtime
     public sealed partial class UIComponent : GameFrameworkComponent
     {
         [Serializable]
-        private sealed class UIGroup
+        private sealed class UIGroupConfig
         {
             [SerializeField]
             private string m_Name = null;

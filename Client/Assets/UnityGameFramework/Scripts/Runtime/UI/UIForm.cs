@@ -18,7 +18,7 @@ namespace UnityGameFramework.Runtime
     {
         private int m_SerialId;
         private string m_UIFormAssetName;
-        private IUIGroup m_UIGroup;
+        private UIGroup m_UIGroup;
         private int m_DepthInUIGroup;
         private bool m_PauseCoveredUIForm;
         private UIFormLogic m_UIFormLogic;
@@ -59,7 +59,7 @@ namespace UnityGameFramework.Runtime
         /// <summary>
         /// 获取界面所属的界面组。
         /// </summary>
-        public IUIGroup UIGroup
+        public UIGroup UIGroup
         {
             get
             {
@@ -109,7 +109,7 @@ namespace UnityGameFramework.Runtime
         /// <param name="pauseCoveredUIForm">是否暂停被覆盖的界面。</param>
         /// <param name="isNewInstance">是否是新实例。</param>
         /// <param name="userData">用户自定义数据。</param>
-        public void OnInit(int serialId, string uiFormAssetName, IUIGroup uiGroup, bool pauseCoveredUIForm, bool isNewInstance, object userData)
+        public void OnInit(int serialId, string uiFormAssetName, UIGroup uiGroup, bool pauseCoveredUIForm, bool isNewInstance, object userData)
         {
             m_SerialId = serialId;
             m_UIFormAssetName = uiFormAssetName;

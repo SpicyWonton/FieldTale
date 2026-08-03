@@ -34,7 +34,7 @@ namespace UnityGameFramework.Runtime
         /// <param name="uiGroup">界面所属的界面组。</param>
         /// <param name="userData">用户自定义数据。</param>
         /// <returns>界面。</returns>
-        public override IUIForm CreateUIForm(object uiFormInstance, IUIGroup uiGroup, object userData)
+        public override IUIForm CreateUIForm(object uiFormInstance, UIGroup uiGroup, object userData)
         {
             GameObject gameObject = uiFormInstance as GameObject;
             if (gameObject == null)

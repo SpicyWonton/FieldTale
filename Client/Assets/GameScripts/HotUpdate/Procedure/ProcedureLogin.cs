@@ -15,7 +15,7 @@ namespace FieldTale.HotUpdate
 
             m_LoginForm = null;
             FrameworkRoot.Event.Subscribe(OpenUIFormSuccessEventArgs.EventId, OnOpenUIFormSuccess);
-            FrameworkRoot.UI.OpenUIForm(AssetUtility.GetUIAsset("Login", "LoginForm"), "Default", this);
+            FrameworkRoot.UI.OpenUIForm(AssetUtility.GetUIAsset("Login", "LoginForm"), "Default", 0, false, this);
         }
 
         protected override void OnLeave(IFsm<IProcedureManager> procedureOwner, bool isShutdown)

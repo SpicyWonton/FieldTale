@@ -101,17 +101,22 @@ namespace UnityGameFramework.Runtime
         /// <summary>
         /// 创建打开界面更新事件。
         /// </summary>
-        /// <param name="e">内部事件。</param>
+        /// <param name="serialId">界面序列编号。</param>
+        /// <param name="uiFormAssetName">界面资源名称。</param>
+        /// <param name="uiGroupName">界面组名称。</param>
+        /// <param name="pauseCoveredUIForm">是否暂停被覆盖的界面。</param>
+        /// <param name="progress">打开界面进度。</param>
+        /// <param name="userData">用户自定义数据。</param>
         /// <returns>创建的打开界面更新事件。</returns>
-        public static OpenUIFormUpdateEventArgs Create(GameFramework.UI.OpenUIFormUpdateEventArgs e)
+        public static OpenUIFormUpdateEventArgs Create(int serialId, string uiFormAssetName, string uiGroupName, bool pauseCoveredUIForm, float progress, object userData)
         {
             OpenUIFormUpdateEventArgs openUIFormUpdateEventArgs = ReferencePool.Acquire<OpenUIFormUpdateEventArgs>();
-            openUIFormUpdateEventArgs.SerialId = e.SerialId;
-            openUIFormUpdateEventArgs.UIFormAssetName = e.UIFormAssetName;
-            openUIFormUpdateEventArgs.UIGroupName = e.UIGroupName;
-            openUIFormUpdateEventArgs.PauseCoveredUIForm = e.PauseCoveredUIForm;
-            openUIFormUpdateEventArgs.Progress = e.Progress;
-            openUIFormUpdateEventArgs.UserData = e.UserData;
+            openUIFormUpdateEventArgs.SerialId = serialId;
+            openUIFormUpdateEventArgs.UIFormAssetName = uiFormAssetName;
+            openUIFormUpdateEventArgs.UIGroupName = uiGroupName;
+            openUIFormUpdateEventArgs.PauseCoveredUIForm = pauseCoveredUIForm;
+            openUIFormUpdateEventArgs.Progress = progress;
+            openUIFormUpdateEventArgs.UserData = userData;
             return openUIFormUpdateEventArgs;
         }
 

@@ -26,7 +26,7 @@ namespace GameFramework.UI
         /// <param name="uiGroup">界面所属的界面组。</param>
         /// <param name="userData">用户自定义数据。</param>
         /// <returns>界面。</returns>
-        IUIForm CreateUIForm(object uiFormInstance, IUIGroup uiGroup, object userData);
+        IUIForm CreateUIForm(object uiFormInstance, UIGroup uiGroup, object userData);
 
         /// <summary>
         /// 释放界面。

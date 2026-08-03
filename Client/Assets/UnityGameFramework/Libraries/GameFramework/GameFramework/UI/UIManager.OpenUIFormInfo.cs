@@ -7,72 +7,69 @@
 
 namespace GameFramework.UI
 {
-    internal sealed partial class UIManager : GameFrameworkModule, IUIManager
+    public sealed class OpenUIFormInfo : IReference
     {
-        private sealed class OpenUIFormInfo : IReference
+        private int m_SerialId;
+        private UIGroup m_UIGroup;
+        private bool m_PauseCoveredUIForm;
+        private object m_UserData;
+
+        public OpenUIFormInfo()
         {
-            private int m_SerialId;
-            private UIGroup m_UIGroup;
-            private bool m_PauseCoveredUIForm;
-            private object m_UserData;
+            m_SerialId = 0;
+            m_UIGroup = null;
+            m_PauseCoveredUIForm = false;
+            m_UserData = null;
+        }
 
-            public OpenUIFormInfo()
+        public int SerialId
+        {
+            get
             {
-                m_SerialId = 0;
-                m_UIGroup = null;
-                m_PauseCoveredUIForm = false;
-                m_UserData = null;
+                return m_SerialId;
             }
+        }
 
-            public int SerialId
+        public UIGroup UIGroup
+        {
+            get
             {
-                get
-                {
-                    return m_SerialId;
-                }
+                return m_UIGroup;
             }
+        }
 
-            public UIGroup UIGroup
+        public bool PauseCoveredUIForm
+        {
+            get
             {
-                get
-                {
-                    return m_UIGroup;
-                }
+                return m_PauseCoveredUIForm;
             }
+        }
 
-            public bool PauseCoveredUIForm
+        public object UserData
+        {
+            get
             {
-                get
-                {
-                    return m_PauseCoveredUIForm;
-                }
+                return m_UserData;
             }
+        }
 
-            public object UserData
-            {
-                get
-                {
-                    return m_UserData;
-                }
-            }
+        public static OpenUIFormInfo Create(int serialId, UIGroup uiGroup, bool pauseCoveredUIForm, object userData)
+        {
+            OpenUIFormInfo openUIFormInfo = ReferencePool.Acquire<OpenUIFormInfo>();
+            openUIFormInfo.m_SerialId = serialId;
+            openUIFormInfo.m_UIGroup = uiGroup;
+            openUIFormInfo.m_PauseCoveredUIForm = pauseCoveredUIForm;
+            openUIFormInfo.m_UserData = userData;
+            return openUIFormInfo;
+        }
 
-            public static OpenUIFormInfo Create(int serialId, UIGroup uiGroup, bool pauseCoveredUIForm, object userData)
-            {
-                OpenUIFormInfo openUIFormInfo = ReferencePool.Acquire<OpenUIFormInfo>();
-                openUIFormInfo.m_SerialId = serialId;
-                openUIFormInfo.m_UIGroup = uiGroup;
-                openUIFormInfo.m_PauseCoveredUIForm = pauseCoveredUIForm;
-                openUIFormInfo.m_UserData = userData;
-                return openUIFormInfo;
-            }
-
-            public void Clear()
-            {
-                m_SerialId = 0;
-                m_UIGroup = null;
-                m_PauseCoveredUIForm = false;
-                m_UserData = null;
-            }
+        public void Clear()
+        {
+            m_SerialId = 0;
+            m_UIGroup = null;
+            m_PauseCoveredUIForm = false;
+            m_UserData = null;
         }
     }
 }
