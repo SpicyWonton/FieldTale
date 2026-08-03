@@ -30,7 +30,6 @@ For versions before Unity 2017.3 (excluded), please delete the above contents an
     <namespace fullname="GameFramework.Scene" preserve="all" />
     <namespace fullname="GameFramework.Setting" preserve="all" />
     <namespace fullname="GameFramework.Sound" preserve="all" />
-    <namespace fullname="GameFramework.UI" preserve="all" />
     <namespace fullname="GameFramework.WebRequest" preserve="all" />
   </assembly>
   <assembly fullname="Assembly-CSharp">

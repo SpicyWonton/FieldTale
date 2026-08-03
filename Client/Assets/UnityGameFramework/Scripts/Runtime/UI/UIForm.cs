@@ -5,7 +5,6 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using GameFramework.UI;
 using System;
 using UnityEngine;
 
@@ -14,7 +13,7 @@ namespace UnityGameFramework.Runtime
     /// <summary>
     /// 界面。
     /// </summary>
-    public sealed class UIForm : MonoBehaviour, IUIForm
+    public sealed class UIForm : MonoBehaviour
     {
         private int m_SerialId;
         private string m_UIFormAssetName;

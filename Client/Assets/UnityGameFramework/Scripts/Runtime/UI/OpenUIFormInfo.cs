@@ -5,7 +5,9 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-namespace GameFramework.UI
+using GameFramework;
+
+namespace UnityGameFramework.Runtime
 {
     public sealed class OpenUIFormInfo : IReference
     {

@@ -6,7 +6,6 @@
 //------------------------------------------------------------
 
 using GameFramework;
-using GameFramework.UI;
 using GameFramework.Event;
 
 namespace UnityGameFramework.Runtime
@@ -76,7 +75,7 @@ namespace UnityGameFramework.Runtime
         /// <param name="duration">加载持续时间。</param>
         /// <param name="userData">用户自定义数据。</param>
         /// <returns>创建的打开界面成功事件。</returns>
-        public static OpenUIFormSuccessEventArgs Create(IUIForm uiForm, float duration, object userData)
+        public static OpenUIFormSuccessEventArgs Create(UIForm uiForm, float duration, object userData)
         {
             OpenUIFormSuccessEventArgs openUIFormSuccessEventArgs = ReferencePool.Acquire<OpenUIFormSuccessEventArgs>();
             openUIFormSuccessEventArgs.UIForm = (UIForm)uiForm;

@@ -5,7 +5,6 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using GameFramework.UI;
 using UnityEngine;
 
 namespace UnityGameFramework.Runtime
@@ -13,7 +12,7 @@ namespace UnityGameFramework.Runtime
     /// <summary>
     /// 界面辅助器基类。
     /// </summary>
-    public abstract class UIFormHelperBase : MonoBehaviour, IUIFormHelper
+    public abstract class UIFormHelperBase : MonoBehaviour
     {
         /// <summary>
         /// 实例化界面。
@@ -29,7 +28,7 @@ namespace UnityGameFramework.Runtime
         /// <param name="uiGroup">界面所属的界面组。</param>
         /// <param name="userData">用户自定义数据。</param>
         /// <returns>界面。</returns>
-        public abstract IUIForm CreateUIForm(object uiFormInstance, UIGroup uiGroup, object userData);
+        public abstract UIForm CreateUIForm(object uiFormInstance, UIGroup uiGroup, object userData);
 
         /// <summary>
         /// 释放界面。

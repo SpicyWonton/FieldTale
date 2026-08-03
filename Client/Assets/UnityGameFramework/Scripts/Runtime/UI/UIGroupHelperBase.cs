@@ -5,7 +5,6 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-using GameFramework.UI;
 using UnityEngine;
 
 namespace UnityGameFramework.Runtime
@@ -13,7 +12,7 @@ namespace UnityGameFramework.Runtime
     /// <summary>
     /// 界面组辅助器基类。
     /// </summary>
-    public abstract class UIGroupHelperBase : MonoBehaviour, IUIGroupHelper
+    public abstract class UIGroupHelperBase : MonoBehaviour
     {
         /// <summary>
         /// 设置界面组深度。

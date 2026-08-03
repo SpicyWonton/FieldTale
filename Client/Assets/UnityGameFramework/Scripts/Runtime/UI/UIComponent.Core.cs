@@ -1,7 +1,6 @@
 using GameFramework;
 using GameFramework.ObjectPool;
 using GameFramework.Resource;
-using GameFramework.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,12 +12,12 @@ namespace UnityGameFramework.Runtime
         private Dictionary<string, UIGroup> m_UIGroups;
         private Dictionary<int, string> m_UIFormsBeingLoaded;
         private HashSet<int> m_UIFormsToReleaseOnLoad;
-        private Queue<IUIForm> m_RecycleQueue;
+        private Queue<UIForm> m_RecycleQueue;
         private LoadAssetCallbacks m_LoadAssetCallbacks;
         private IObjectPoolManager m_ObjectPoolManager;
         private IResourceManager m_ResourceManager;
         private IObjectPool<UIFormInstanceObject> m_InstancePool;
-        private IUIFormHelper m_UIFormHelper;
+        private UIFormHelperBase m_UIFormHelper;
         private int m_Serial;
         private bool m_IsShutdown;
 
@@ -55,7 +54,7 @@ namespace UnityGameFramework.Runtime
         /// 设置界面辅助器。
         /// </summary>
         /// <param name="uiFormHelper">界面辅助器。</param>
-        public void SetUIFormHelper(IUIFormHelper uiFormHelper)
+        public void SetUIFormHelper(UIFormHelperBase uiFormHelper)
         {
             if (uiFormHelper == null)
             {
@@ -200,11 +199,11 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         /// <param name="serialId">界面序列编号。</param>
         /// <returns>要获取的界面。</returns>
-        public IUIForm GetUIForm(int serialId)
+        public UIForm GetUIForm(int serialId)
         {
             foreach (KeyValuePair<string, UIGroup> uiGroup in m_UIGroups)
             {
-                IUIForm uiForm = uiGroup.Value.GetUIForm(serialId);
+                UIForm uiForm = uiGroup.Value.GetUIForm(serialId);
                 if (uiForm != null)
                 {
                     return uiForm;
@@ -219,7 +218,7 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         /// <param name="uiFormAssetName">界面资源名称。</param>
         /// <returns>要获取的界面。</returns>
-        public IUIForm GetUIForm(string uiFormAssetName)
+        public UIForm GetUIForm(string uiFormAssetName)
         {
             if (string.IsNullOrEmpty(uiFormAssetName))
             {
@@ -228,7 +227,7 @@ namespace UnityGameFramework.Runtime
 
             foreach (KeyValuePair<string, UIGroup> uiGroup in m_UIGroups)
             {
-                IUIForm uiForm = uiGroup.Value.GetUIForm(uiFormAssetName);
+                UIForm uiForm = uiGroup.Value.GetUIForm(uiFormAssetName);
                 if (uiForm != null)
                 {
                     return uiForm;
@@ -243,14 +242,14 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         /// <param name="uiFormAssetName">界面资源名称。</param>
         /// <returns>要获取的界面。</returns>
-        public IReadOnlyList<IUIForm> GetUIForms(string uiFormAssetName)
+        public IReadOnlyList<UIForm> GetUIForms(string uiFormAssetName)
         {
             if (string.IsNullOrEmpty(uiFormAssetName))
             {
                 throw new GameFrameworkException("UI form asset name is invalid.");
             }
 
-            List<IUIForm> results = new List<IUIForm>();
+            List<UIForm> results = new List<UIForm>();
             foreach (KeyValuePair<string, UIGroup> uiGroup in m_UIGroups)
             {
                 uiGroup.Value.GetUIForms(uiFormAssetName, results, false);
@@ -263,9 +262,9 @@ namespace UnityGameFramework.Runtime
         /// 获取所有已加载的界面。
         /// </summary>
         /// <returns>所有已加载的界面。</returns>
-        public IReadOnlyList<IUIForm> GetAllLoadedUIForms()
+        public IReadOnlyList<UIForm> GetAllLoadedUIForms()
         {
-            List<IUIForm> results = new List<IUIForm>();
+            List<UIForm> results = new List<UIForm>();
             foreach (KeyValuePair<string, UIGroup> uiGroup in m_UIGroups)
             {
                 uiGroup.Value.GetAllUIForms(results, false);
@@ -319,7 +318,7 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         /// <param name="uiForm">界面。</param>
         /// <returns>界面是否合法。</returns>
-        public bool IsValidUIForm(IUIForm uiForm)
+        public bool IsValidUIForm(UIForm uiForm)
         {
             if (uiForm == null)
             {
@@ -395,7 +394,7 @@ namespace UnityGameFramework.Runtime
                 return;
             }
 
-            IUIForm uiForm = GetUIForm(serialId);
+            UIForm uiForm = GetUIForm(serialId);
             if (uiForm == null)
             {
                 throw new GameFrameworkException(Utility.Text.Format("Can not find UI form '{0}'.", serialId));
@@ -409,7 +408,7 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         /// <param name="uiForm">要关闭的界面。</param>
         /// <param name="userData">用户自定义数据。</param>
-        public void CloseUIForm(IUIForm uiForm, object userData = null)
+        public void CloseUIForm(UIForm uiForm, object userData = null)
         {
             if (uiForm == null)
             {
@@ -438,8 +437,8 @@ namespace UnityGameFramework.Runtime
         /// <param name="userData">用户自定义数据。</param>
         public void CloseAllLoadedUIForms(object userData = null)
         {
-            IReadOnlyList<IUIForm> uiForms = GetAllLoadedUIForms();
-            foreach (IUIForm uiForm in uiForms)
+            IReadOnlyList<UIForm> uiForms = GetAllLoadedUIForms();
+            foreach (UIForm uiForm in uiForms)
             {
                 if (!HasUIForm(uiForm.SerialId))
                 {
@@ -468,7 +467,7 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         /// <param name="uiForm">要激活的界面。</param>
         /// <param name="userData">用户自定义数据。</param>
-        public void RefocusUIForm(IUIForm uiForm, object userData = null)
+        public void RefocusUIForm(UIForm uiForm, object userData = null)
         {
             if (uiForm == null)
             {
@@ -520,7 +519,7 @@ namespace UnityGameFramework.Runtime
         {
             try
             {
-                IUIForm uiForm = m_UIFormHelper.CreateUIForm(uiFormInstance, uiGroup, userData);
+                UIForm uiForm = m_UIFormHelper.CreateUIForm(uiFormInstance, uiGroup, userData);
                 if (uiForm == null)
                 {
                     throw new GameFrameworkException("Can not create UI form in UI form helper.");

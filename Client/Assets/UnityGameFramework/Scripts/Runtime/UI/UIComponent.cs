@@ -8,7 +8,6 @@
 using GameFramework;
 using GameFramework.ObjectPool;
 using GameFramework.Resource;
-using GameFramework.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -150,7 +149,7 @@ namespace UnityGameFramework.Runtime
             m_UIGroups = new Dictionary<string, UIGroup>(StringComparer.Ordinal);
             m_UIFormsBeingLoaded = new Dictionary<int, string>();
             m_UIFormsToReleaseOnLoad = new HashSet<int>();
-            m_RecycleQueue = new Queue<IUIForm>();
+            m_RecycleQueue = new Queue<UIForm>();
             m_LoadAssetCallbacks = new LoadAssetCallbacks(LoadAssetSuccessCallback, LoadAssetFailureCallback, LoadAssetUpdateCallback, LoadAssetDependencyAssetCallback);
             m_ObjectPoolManager = null;
             m_ResourceManager = null;
@@ -245,7 +244,7 @@ namespace UnityGameFramework.Runtime
             // 界面关闭时会进入回收队列，下一帧回收掉
             while (m_RecycleQueue.Count > 0)
             {
-                IUIForm uiForm = m_RecycleQueue.Dequeue();
+                UIForm uiForm = m_RecycleQueue.Dequeue();
                 uiForm.OnRecycle();
                 m_InstancePool.Unspawn(uiForm.Handle);
             }

@@ -5,7 +5,9 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
-namespace GameFramework.UI
+using GameFramework;
+
+namespace UnityGameFramework.Runtime
 {
     public sealed partial class UIGroup
     {
@@ -14,7 +16,7 @@ namespace GameFramework.UI
         /// </summary>
         private sealed class UIFormInfo : IReference
         {
-            private IUIForm m_UIForm;
+            private UIForm m_UIForm;
             private bool m_Paused;
             private bool m_Covered;
 
@@ -25,7 +27,7 @@ namespace GameFramework.UI
                 m_Covered = false;
             }
 
-            public IUIForm UIForm
+            public UIForm UIForm
             {
                 get
                 {
@@ -57,7 +59,7 @@ namespace GameFramework.UI
                 }
             }
 
-            public static UIFormInfo Create(IUIForm uiForm)
+            public static UIFormInfo Create(UIForm uiForm)
             {
                 if (uiForm == null)
                 {

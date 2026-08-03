@@ -5,9 +5,10 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using GameFramework;
 using System.Collections.Generic;
 
-namespace GameFramework.UI
+namespace UnityGameFramework.Runtime
 {
     /// <summary>
     /// 界面组。
@@ -17,7 +18,7 @@ namespace GameFramework.UI
         private readonly string m_Name;
         private int m_Depth;
         private bool m_Pause;
-        private readonly IUIGroupHelper m_UIGroupHelper;
+        private readonly UIGroupHelperBase m_UIGroupHelper;
         private readonly GameFrameworkLinkedList<UIFormInfo> m_UIFormInfos;
         private LinkedListNode<UIFormInfo> m_CachedNode;
 
@@ -27,7 +28,7 @@ namespace GameFramework.UI
         /// <param name="name">界面组名称。</param>
         /// <param name="depth">界面组深度。</param>
         /// <param name="uiGroupHelper">界面组辅助器。</param>
-        public UIGroup(string name, int depth, IUIGroupHelper uiGroupHelper)
+        public UIGroup(string name, int depth, UIGroupHelperBase uiGroupHelper)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -115,7 +116,7 @@ namespace GameFramework.UI
         /// <summary>
         /// 获取当前界面。
         /// </summary>
-        public IUIForm CurrentUIForm
+        public UIForm CurrentUIForm
         {
             get
             {
@@ -126,7 +127,7 @@ namespace GameFramework.UI
         /// <summary>
         /// 获取界面组辅助器。
         /// </summary>
-        public IUIGroupHelper Helper
+        public UIGroupHelperBase Helper
         {
             get
             {
@@ -202,7 +203,7 @@ namespace GameFramework.UI
         /// </summary>
         /// <param name="serialId">界面序列编号。</param>
         /// <returns>要获取的界面。</returns>
-        public IUIForm GetUIForm(int serialId)
+        public UIForm GetUIForm(int serialId)
         {
             foreach (UIFormInfo uiFormInfo in m_UIFormInfos)
             {
@@ -220,7 +221,7 @@ namespace GameFramework.UI
         /// </summary>
         /// <param name="uiFormAssetName">界面资源名称。</param>
         /// <returns>要获取的界面。</returns>
-        public IUIForm GetUIForm(string uiFormAssetName)
+        public UIForm GetUIForm(string uiFormAssetName)
         {
             if (string.IsNullOrEmpty(uiFormAssetName))
             {
@@ -243,14 +244,14 @@ namespace GameFramework.UI
         /// </summary>
         /// <param name="uiFormAssetName">界面资源名称。</param>
         /// <returns>要获取的界面。</returns>
-        public IReadOnlyList<IUIForm> GetUIForms(string uiFormAssetName)
+        public IReadOnlyList<UIForm> GetUIForms(string uiFormAssetName)
         {
             if (string.IsNullOrEmpty(uiFormAssetName))
             {
                 throw new GameFrameworkException("UI form asset name is invalid.");
             }
 
-            List<IUIForm> results = new List<IUIForm>();
+            List<UIForm> results = new List<UIForm>();
             foreach (UIFormInfo uiFormInfo in m_UIFormInfos)
             {
                 if (uiFormInfo.UIForm.UIFormAssetName == uiFormAssetName)
@@ -268,7 +269,7 @@ namespace GameFramework.UI
         /// <param name="uiFormAssetName">界面资源名称。</param>
         /// <param name="results">要获取的界面。</param>
         /// <param name="clearResults">是否先清空results</param>
-        public void GetUIForms(string uiFormAssetName, List<IUIForm> results, bool clearResults = true)
+        public void GetUIForms(string uiFormAssetName, List<UIForm> results, bool clearResults = true)
         {
             if (string.IsNullOrEmpty(uiFormAssetName))
             {
@@ -298,9 +299,9 @@ namespace GameFramework.UI
         /// 从界面组中获取所有界面。
         /// </summary>
         /// <returns>界面组中的所有界面。</returns>
-        public IReadOnlyList<IUIForm> GetAllUIForms()
+        public IReadOnlyList<UIForm> GetAllUIForms()
         {
-            List<IUIForm> results = new List<IUIForm>(m_UIFormInfos.Count);
+            List<UIForm> results = new List<UIForm>(m_UIFormInfos.Count);
             foreach (UIFormInfo uiFormInfo in m_UIFormInfos)
             {
                 results.Add(uiFormInfo.UIForm);
@@ -314,7 +315,7 @@ namespace GameFramework.UI
         /// </summary>
         /// <param name="results">界面组中的所有界面。</param>
         /// <param name="clearResults">是否先清空results</param>
-        public void GetAllUIForms(List<IUIForm> results, bool clearResults = true)
+        public void GetAllUIForms(List<UIForm> results, bool clearResults = true)
         {
             if (results == null)
             {
@@ -336,7 +337,7 @@ namespace GameFramework.UI
         /// 往界面组增加界面。
         /// </summary>
         /// <param name="uiForm">要增加的界面。</param>
-        public void AddUIForm(IUIForm uiForm)
+        public void AddUIForm(UIForm uiForm)
         {
             m_UIFormInfos.AddFirst(UIFormInfo.Create(uiForm));
         }
@@ -345,7 +346,7 @@ namespace GameFramework.UI
         /// 从界面组移除界面。
         /// </summary>
         /// <param name="uiForm">要移除的界面。</param>
-        public void RemoveUIForm(IUIForm uiForm)
+        public void RemoveUIForm(UIForm uiForm)
         {
             UIFormInfo uiFormInfo = GetUIFormInfo(uiForm);
             if (uiFormInfo == null)
@@ -382,7 +383,7 @@ namespace GameFramework.UI
         /// 激活界面。
         /// </summary>
         /// <param name="uiForm">要激活的界面。</param>
-        public void RefocusUIForm(IUIForm uiForm)
+        public void RefocusUIForm(UIForm uiForm)
         {
             UIFormInfo uiFormInfo = GetUIFormInfo(uiForm);
             if (uiFormInfo == null)
@@ -483,7 +484,7 @@ namespace GameFramework.UI
             }
         }
 
-        private UIFormInfo GetUIFormInfo(IUIForm uiForm)
+        private UIFormInfo GetUIFormInfo(UIForm uiForm)
         {
             if (uiForm == null)
             {

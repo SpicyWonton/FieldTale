@@ -5,9 +5,10 @@
 // Feedback: mailto:ellan@gameframework.cn
 //------------------------------------------------------------
 
+using GameFramework;
 using GameFramework.ObjectPool;
 
-namespace GameFramework.UI
+namespace UnityGameFramework.Runtime
 {
     /// <summary>
     /// 界面实例对象。
@@ -15,7 +16,7 @@ namespace GameFramework.UI
     public sealed class UIFormInstanceObject : ObjectBase
     {
         private object m_UIFormAsset;
-        private IUIFormHelper m_UIFormHelper;
+        private UIFormHelperBase m_UIFormHelper;
 
         public UIFormInstanceObject()
         {
@@ -23,7 +24,7 @@ namespace GameFramework.UI
             m_UIFormHelper = null;
         }
 
-        public static UIFormInstanceObject Create(string name, object uiFormAsset, object uiFormInstance, IUIFormHelper uiFormHelper)
+        public static UIFormInstanceObject Create(string name, object uiFormAsset, object uiFormInstance, UIFormHelperBase uiFormHelper)
         {
             if (uiFormAsset == null)
             {
@@ -49,7 +50,7 @@ namespace GameFramework.UI
             m_UIFormHelper = null;
         }
 
-        protected internal override void Release(bool isShutdown)
+        protected override void Release(bool isShutdown)
         {
             m_UIFormHelper.ReleaseUIForm(m_UIFormAsset, Target);
         }
