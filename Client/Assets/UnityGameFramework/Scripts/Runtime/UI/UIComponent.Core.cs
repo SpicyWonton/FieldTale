@@ -146,7 +146,19 @@ namespace UnityGameFramework.Runtime
             uiGroupHelper.gameObject.layer = LayerMask.NameToLayer("UI");
             Transform transform = uiGroupHelper.transform;
             transform.SetParent(m_InstanceRoot);
-            transform.localScale = Vector3.one;
+            RectTransform rectTransform = transform as RectTransform;
+            if (rectTransform == null)
+            {
+                rectTransform = uiGroupHelper.gameObject.AddComponent<RectTransform>();
+            }
+
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.offsetMin = Vector2.zero;
+            rectTransform.offsetMax = Vector2.zero;
+            rectTransform.localPosition = Vector3.zero;
+            rectTransform.localRotation = Quaternion.identity;
+            rectTransform.localScale = Vector3.one;
 
             m_UIGroups.Add(uiGroupName, new UIGroup(uiGroupName, uiGroupDepth, uiGroupHelper));
 

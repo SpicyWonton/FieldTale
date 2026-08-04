@@ -208,22 +208,13 @@ namespace GameFramework.ObjectPool
             /// <summary>
             /// 检查对象。
             /// </summary>
-            /// <returns>要检查的对象是否存在。</returns>
-            public bool CanSpawn()
-            {
-                return CanSpawn(string.Empty);
-            }
-
-            /// <summary>
-            /// 检查对象。
-            /// </summary>
             /// <param name="name">对象名称。</param>
             /// <returns>要检查的对象是否存在。</returns>
-            public bool CanSpawn(string name)
+            public bool CanSpawn(string name = null)
             {
                 if (name == null)
                 {
-                    throw new GameFrameworkException("Name is invalid.");
+                    name = string.Empty;
                 }
 
                 GameFrameworkLinkedListRange<Object<T>> objectRange = default(GameFrameworkLinkedListRange<Object<T>>);
@@ -244,22 +235,13 @@ namespace GameFramework.ObjectPool
             /// <summary>
             /// 获取对象。
             /// </summary>
-            /// <returns>要获取的对象。</returns>
-            public T Spawn()
-            {
-                return Spawn(string.Empty);
-            }
-
-            /// <summary>
-            /// 获取对象。
-            /// </summary>
             /// <param name="name">对象名称。</param>
             /// <returns>要获取的对象。</returns>
-            public T Spawn(string name)
+            public T Spawn(string name = null)
             {
                 if (name == null)
                 {
-                    throw new GameFrameworkException("Name is invalid.");
+                    name = string.Empty;
                 }
 
                 GameFrameworkLinkedListRange<Object<T>> objectRange = default(GameFrameworkLinkedListRange<Object<T>>);

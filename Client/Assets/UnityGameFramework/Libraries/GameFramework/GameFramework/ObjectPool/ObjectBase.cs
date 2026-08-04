@@ -124,41 +124,9 @@ namespace GameFramework.ObjectPool
         /// </summary>
         /// <param name="name">对象名称。</param>
         /// <param name="target">对象。</param>
-        protected void Initialize(string name, object target)
-        {
-            Initialize(name, target, false, 0);
-        }
-
-        /// <summary>
-        /// 初始化对象基类。
-        /// </summary>
-        /// <param name="name">对象名称。</param>
-        /// <param name="target">对象。</param>
-        /// <param name="locked">对象是否被加锁。</param>
-        protected void Initialize(string name, object target, bool locked)
-        {
-            Initialize(name, target, locked, 0);
-        }
-
-        /// <summary>
-        /// 初始化对象基类。
-        /// </summary>
-        /// <param name="name">对象名称。</param>
-        /// <param name="target">对象。</param>
-        /// <param name="priority">对象的优先级。</param>
-        protected void Initialize(string name, object target, int priority)
-        {
-            Initialize(name, target, false, priority);
-        }
-
-        /// <summary>
-        /// 初始化对象基类。
-        /// </summary>
-        /// <param name="name">对象名称。</param>
-        /// <param name="target">对象。</param>
         /// <param name="locked">对象是否被加锁。</param>
         /// <param name="priority">对象的优先级。</param>
-        protected void Initialize(string name, object target, bool locked, int priority)
+        protected void Initialize(string name, object target, bool locked = false, int priority = 0)
         {
             if (target == null)
             {
@@ -173,7 +141,7 @@ namespace GameFramework.ObjectPool
         }
 
         /// <summary>
-        /// 清理对象基类。
+        /// 清理对象基类，回收进引用池时调用。
         /// </summary>
         public virtual void Clear()
         {
@@ -199,7 +167,7 @@ namespace GameFramework.ObjectPool
         }
 
         /// <summary>
-        /// 释放对象。
+        /// 对象池释放对象。
         /// </summary>
         /// <param name="isShutdown">是否是关闭对象池时触发。</param>
         protected internal abstract void Release(bool isShutdown);

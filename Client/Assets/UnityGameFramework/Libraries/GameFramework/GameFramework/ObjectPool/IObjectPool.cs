@@ -109,21 +109,9 @@ namespace GameFramework.ObjectPool
         /// <summary>
         /// 检查对象。
         /// </summary>
-        /// <returns>要检查的对象是否存在。</returns>
-        bool CanSpawn();
-
-        /// <summary>
-        /// 检查对象。
-        /// </summary>
         /// <param name="name">对象名称。</param>
         /// <returns>要检查的对象是否存在。</returns>
         bool CanSpawn(string name);
-
-        /// <summary>
-        /// 获取对象。
-        /// </summary>
-        /// <returns>要获取的对象。</returns>
-        T Spawn();
 
         /// <summary>
         /// 获取对象。
