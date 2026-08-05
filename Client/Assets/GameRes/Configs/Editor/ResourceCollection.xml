@@ -4,6 +4,7 @@
     <Resources>
       <Resource Name="DataTables" LoadType="0" Packed="False" />
       <Resource Name="Entities" LoadType="0" Packed="False" />
+      <Resource Name="Fonts" LoadType="0" Packed="True" />
       <Resource Name="HotUpdate" LoadType="0" Packed="False" />
       <Resource Name="MetaDlls" LoadType="0" Packed="False" />
       <Resource Name="Scenes" LoadType="0" Packed="True" />
@@ -17,8 +18,10 @@
       <Asset Guid="5d40536edca3fa14bbedb804a30d819d" ResourceName="MetaDlls" />
       <Asset Guid="93ebe283d524cf245a172b026550011f" ResourceName="MetaDlls" />
       <Asset Guid="9817f53be50d4384bbe9f4af6d5fcff2" ResourceName="MetaDlls" />
+      <Asset Guid="abbb6ca9e1bbb5146818172e53353ad0" ResourceName="Fonts" />
       <Asset Guid="ad8abcd0fcad26c4c984d9956206310f" ResourceName="MetaDlls" />
       <Asset Guid="b2c5de3eada5943a0bedb4f88f7cdb07" ResourceName="Entities" />
+      <Asset Guid="b98bc1a3cb4987540a105135a3484f54" ResourceName="Fonts" />
       <Asset Guid="bede41822ba641b4d8cb2102a0547fa9" ResourceName="Scenes" />
       <Asset Guid="caf5dd5fd15eecc4d8a87f5f24929f33" ResourceName="UIForms" />
       <Asset Guid="e519c5e5ca51a0e42af10f4876baab9c" ResourceName="MetaDlls" />
