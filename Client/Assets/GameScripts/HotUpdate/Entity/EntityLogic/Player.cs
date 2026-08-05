@@ -8,45 +8,55 @@ namespace FieldTale.HotUpdate
     [RequireComponent(typeof(Rigidbody2D))]
     public class Player : Entity
     {
-        private const float NetworkTickInterval = 0.05f;
-        private const float RemoteInterpolationDelayTicks = 2f;
+        // 客户端输入命令和服务端权威模拟统一为 20 Hz。
+        private const float TickInterval = 0.05f;
+        // 远端玩家故意落后两个逻辑帧渲染，为快照抖动预留插值空间。
+        private const float RenderDelayTicks = 2f;
+        // 小误差渐进修正；误差过大时直接采用权威位置。
+        private const float CorrectionSharpness = 12f;
+        private const float TeleportDistance = 2f;
 
+        // 已完成、已发送但可能尚未被服务端确认的本地输入帧。
         private struct InputCommand
         {
-            public InputCommand(uint clientTick, Vector2 input)
+            public InputCommand(uint tick, Vector2 input)
             {
-                ClientTick = clientTick;
+                Tick = tick;
                 Input = input;
             }
 
-            public uint ClientTick;
+            public uint Tick;
             public Vector2 Input;
         }
 
-        private struct NetworkSnapshot
+        // 远端玩家的一帧服务端权威状态。
+        private struct Snapshot
         {
-            public NetworkSnapshot(uint serverTick, Vector2 position)
+            public Snapshot(uint tick, Vector2 position)
             {
-                ServerTick = serverTick;
+                Tick = tick;
                 Position = position;
             }
 
-            public uint ServerTick;
+            public uint Tick;
             public Vector2 Position;
         }
 
         [SerializeField]
         private PlayerData m_PlayerData = null;
 
-
+        // 收到 ACK 后会移除已处理输入，再从权威位置回放剩余输入。
         private readonly List<InputCommand> m_PendingInputs = new List<InputCommand>();
-        private readonly List<NetworkSnapshot> m_RemoteSnapshots = new List<NetworkSnapshot>();
+        private readonly List<Snapshot> m_Snapshots = new List<Snapshot>();
 
-        private float m_NetworkTickTimer;
-        private float m_RemoteRenderTick;
+        private float m_TickTimer;
+        private float m_RenderTick;
+        private Vector2 m_FrameInput;         // 当前渲染帧采样到的输入。
+        private Vector2 m_TickInput;          // 当前 50 ms 逻辑帧锁存的输入。
+        private Vector2 m_Correction;
         private uint m_ClientTick;
         private uint m_LastServerTick;
-        private bool m_HasRemoteRenderTick;
+        private bool m_HasRenderTick;
 
         public Rigidbody2D CachedRigidbody2D
         {
@@ -71,13 +81,20 @@ namespace FieldTale.HotUpdate
                 return;
             }
 
-            m_NetworkTickTimer = 0f;
-            m_RemoteRenderTick = 0f;
+            m_TickTimer = 0f;
+            m_RenderTick = 0f;
+            m_FrameInput = SampleInput();
+            m_TickInput = m_FrameInput;
+            m_Correction = Vector2.zero;
             m_ClientTick = 0;
             m_LastServerTick = 0;
-            m_HasRemoteRenderTick = false;
+            m_HasRenderTick = false;
             m_PendingInputs.Clear();
-            m_RemoteSnapshots.Clear();
+            m_Snapshots.Clear();
+            // 本地玩家由物理帧移动，需要刚体插值平滑到渲染帧；远端已经自行做快照插值。
+            CachedRigidbody2D.interpolation = m_PlayerData.IsSelf
+                ? RigidbodyInterpolation2D.Interpolate
+                : RigidbodyInterpolation2D.None;
         }
 
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
@@ -86,15 +103,24 @@ namespace FieldTale.HotUpdate
 
             if (m_PlayerData.IsSelf)
             {
-                UpdateLocalPlayer(elapseSeconds);
+                // 输入按渲染帧采集，但只能在逻辑帧边界切换模拟输入。
+                m_FrameInput = SampleInput();
             }
             else
             {
-                UpdateRemotePlayer(elapseSeconds);
+                RenderRemote(elapseSeconds);
             }
         }
 
-        public void ReceiveNetworkSnapshot(Vector3 position, uint serverTick, uint lastProcessedClientTick)
+        private void FixedUpdate()
+        {
+            if (m_PlayerData != null && m_PlayerData.IsSelf)
+            {
+                SimulateLocal(Time.fixedDeltaTime);
+            }
+        }
+
+        public void ReceiveSnapshot(Vector3 position, uint serverTick, uint processedInputTick)
         {
             if (m_PlayerData == null)
             {
@@ -103,63 +129,105 @@ namespace FieldTale.HotUpdate
 
             if (m_PlayerData.IsSelf)
             {
-                ApplyAuthoritativeSnapshot((Vector2)position, serverTick, lastProcessedClientTick);
+                Reconcile((Vector2)position, serverTick, processedInputTick);
                 return;
             }
 
-            BufferRemoteSnapshot((Vector2)position, serverTick);
+            BufferSnapshot((Vector2)position, serverTick);
         }
 
-        private void UpdateLocalPlayer(float elapseSeconds)
+        private void SimulateLocal(float fixedDeltaSeconds)
         {
-            m_NetworkTickTimer += elapseSeconds;
-            while (m_NetworkTickTimer >= NetworkTickInterval)
-            {
-                m_NetworkTickTimer -= NetworkTickInterval;
+            Vector2 targetPosition = CachedRigidbody2D.position;
 
-                Vector2 input = GetCurrentInput();
+            float remainingSeconds = fixedDeltaSeconds;
+            while (remainingSeconds > 0f)
+            {
+                // 一个FixedUpdate可能跨越20Hz逻辑帧边界，因此按边界拆分模拟时间。
+                float stepSeconds = Mathf.Min(remainingSeconds, TickInterval - m_TickTimer);
+                targetPosition = SimulateMove(targetPosition, m_TickInput, stepSeconds);
+                m_TickTimer += stepSeconds;
+                remainingSeconds -= stepSeconds;
+
+                if (m_TickTimer < TickInterval)
+                {
+                    continue;
+                }
+                m_TickTimer = 0f;
+
+                // 只有完整模拟满50ms的输入才能作为一条可回放命令发送。
                 uint clientTick = ++m_ClientTick;
-                m_PendingInputs.Add(new InputCommand(clientTick, input));
+                m_PendingInputs.Add(new InputCommand(clientTick, m_TickInput));
+                Fantasy.Runtime.Session.C2M_PlayerMove(
+                    clientTick,
+                    Mathf.RoundToInt(m_TickInput.x),
+                    Mathf.RoundToInt(m_TickInput.y));
 
-                CachedRigidbody2D.position = SimulateMove(CachedRigidbody2D.position, input, NetworkTickInterval);
-                Fantasy.Runtime.Session.C2M_PlayerMove(clientTick, Mathf.RoundToInt(input.x), Mathf.RoundToInt(input.y));
+                // 下一逻辑帧使用最近一次Update采集到的输入。
+                m_TickInput = m_FrameInput;
             }
+
+            if (m_Correction.sqrMagnitude > Mathf.Epsilon)
+            {
+                // 逐物理帧消化小误差，避免每次收到权威快照都产生可见瞬移。
+                float correctionFactor = 1f - Mathf.Exp(-CorrectionSharpness * fixedDeltaSeconds);
+                Vector2 correctionStep = m_Correction * correctionFactor;
+                targetPosition += correctionStep;
+                m_Correction -= correctionStep;
+
+                if (m_Correction.sqrMagnitude < 0.000001f)
+                {
+                    m_Correction = Vector2.zero;
+                }
+            }
+
+            CachedRigidbody2D.MovePosition(targetPosition);
         }
 
-        private void UpdateRemotePlayer(float elapseSeconds)
+        private void RenderRemote(float frameDeltaSeconds)
         {
-            if (m_RemoteSnapshots.Count == 0)
+            if (m_Snapshots.Count == 0)
             {
                 return;
             }
 
-            if (m_RemoteSnapshots.Count == 1)
+            if (m_Snapshots.Count == 1)
             {
-                CachedRigidbody2D.position = m_RemoteSnapshots[0].Position;
+                CachedRigidbody2D.position = m_Snapshots[0].Position;
                 return;
             }
 
-            float latestTick = m_RemoteSnapshots[m_RemoteSnapshots.Count - 1].ServerTick - RemoteInterpolationDelayTicks;
-            m_RemoteRenderTick = Mathf.Min(m_RemoteRenderTick + elapseSeconds / NetworkTickInterval, latestTick);
+            // 渲染时间线追赶到“最新服务端帧 - 插值延迟”，但不越过它。
+            float targetRenderTick = m_Snapshots[m_Snapshots.Count - 1].Tick - RenderDelayTicks;
+            m_RenderTick = Mathf.Min(
+                m_RenderTick + frameDeltaSeconds / TickInterval,
+                targetRenderTick);
 
-            while (m_RemoteSnapshots.Count > 1 && m_RemoteSnapshots[1].ServerTick <= m_RemoteRenderTick)
+            // 丢弃渲染时间线已经越过的旧快照，并保留前后两帧用于插值。
+            while (m_Snapshots.Count > 1 && m_Snapshots[1].Tick <= m_RenderTick)
             {
-                m_RemoteSnapshots.RemoveAt(0);
+                m_Snapshots.RemoveAt(0);
             }
 
-            if (m_RemoteSnapshots.Count == 1)
+            if (m_Snapshots.Count == 1)
             {
-                CachedRigidbody2D.position = m_RemoteSnapshots[0].Position;
+                CachedRigidbody2D.position = m_Snapshots[0].Position;
                 return;
             }
 
-            NetworkSnapshot from = m_RemoteSnapshots[0];
-            NetworkSnapshot to = m_RemoteSnapshots[1];
-            float t = Mathf.InverseLerp(from.ServerTick, to.ServerTick, m_RemoteRenderTick);
-            CachedRigidbody2D.position = Vector2.Lerp(from.Position, to.Position, t);
+            Snapshot fromSnapshot = m_Snapshots[0];
+            Snapshot toSnapshot = m_Snapshots[1];
+            float interpolationFactor = Mathf.InverseLerp(
+                fromSnapshot.Tick,
+                toSnapshot.Tick,
+                m_RenderTick);
+            CachedRigidbody2D.position = Vector2.Lerp(
+                fromSnapshot.Position,
+                toSnapshot.Position,
+                interpolationFactor);
         }
 
-        private void ApplyAuthoritativeSnapshot(Vector2 position, uint serverTick, uint lastProcessedClientTick)
+        private void Reconcile(Vector2 authoritativePosition, uint serverTick, uint processedInputTick)
         {
             if (serverTick < m_LastServerTick)
             {
@@ -167,33 +235,47 @@ namespace FieldTale.HotUpdate
             }
 
             m_LastServerTick = serverTick;
-            m_PendingInputs.RemoveAll(command => command.ClientTick <= lastProcessedClientTick);
+            // 权威位置已经包含 processedInputTick 及之前的输入，不能重复回放。
+            m_PendingInputs.RemoveAll(command => command.Tick <= processedInputTick);
 
-            Vector2 correctedPosition = position;
+            // 从服务端权威位置重新执行所有已发送但尚未确认的完整输入帧。
+            Vector2 correctedPosition = authoritativePosition;
             for (int i = 0; i < m_PendingInputs.Count; i++)
             {
-                correctedPosition = SimulateMove(correctedPosition, m_PendingInputs[i].Input, NetworkTickInterval);
+                correctedPosition = SimulateMove(correctedPosition, m_PendingInputs[i].Input, TickInterval);
             }
 
-            CachedRigidbody2D.position = correctedPosition;
+            // 当前逻辑帧尚未发送，也要按已经实际模拟的时长补回。
+            correctedPosition = SimulateMove(correctedPosition, m_TickInput, m_TickTimer);
+            Vector2 correction = correctedPosition - CachedRigidbody2D.position;
+            if (correction.sqrMagnitude >= TeleportDistance * TeleportDistance)
+            {
+                // 大误差通常意味着严重丢帧或状态失配，继续平滑会长期不同步。
+                CachedRigidbody2D.position = correctedPosition;
+                m_Correction = Vector2.zero;
+                return;
+            }
+
+            m_Correction = correction;
         }
 
-        private void BufferRemoteSnapshot(Vector2 position, uint serverTick)
+        private void BufferSnapshot(Vector2 position, uint serverTick)
         {
-            if (m_RemoteSnapshots.Count > 0 && serverTick <= m_RemoteSnapshots[m_RemoteSnapshots.Count - 1].ServerTick)
+            if (m_Snapshots.Count > 0 && serverTick <= m_Snapshots[m_Snapshots.Count - 1].Tick)
             {
                 return;
             }
 
-            m_RemoteSnapshots.Add(new NetworkSnapshot(serverTick, position));
-            if (!m_HasRemoteRenderTick)
+            m_Snapshots.Add(new Snapshot(serverTick, position));
+            if (!m_HasRenderTick)
             {
-                m_RemoteRenderTick = Mathf.Max(0f, serverTick - RemoteInterpolationDelayTicks);
-                m_HasRemoteRenderTick = true;
+                // 首帧快照直接建立延迟后的远端渲染时间线。
+                m_RenderTick = Mathf.Max(0f, serverTick - RenderDelayTicks);
+                m_HasRenderTick = true;
             }
         }
 
-        private static Vector2 GetCurrentInput()
+        private static Vector2 SampleInput()
         {
             return new Vector2(
                 Mathf.RoundToInt(Input.GetAxisRaw("Horizontal")),

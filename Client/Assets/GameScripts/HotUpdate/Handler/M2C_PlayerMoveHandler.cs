@@ -21,7 +21,7 @@ namespace FieldTale.HotUpdate
             Player player = entity == null ? null : entity.Logic as Player;
             if (player != null)
             {
-                player.ReceiveNetworkSnapshot(
+                player.ReceiveSnapshot(
                     new Vector3(message.Pos.X, message.Pos.Y, message.Pos.Z),
                     message.ServerTick,
                     message.LastProcessedClientTick);
