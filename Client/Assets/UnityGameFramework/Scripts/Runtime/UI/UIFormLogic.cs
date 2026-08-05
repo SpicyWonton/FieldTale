@@ -6,6 +6,7 @@
 //------------------------------------------------------------
 
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UnityGameFramework.Runtime
 {
@@ -197,6 +198,11 @@ namespace UnityGameFramework.Runtime
             if (canvas == null)
             {
                 canvas = gameObject.AddComponent<Canvas>();
+            }
+
+            if (GetComponent<GraphicRaycaster>() == null)
+            {
+                gameObject.AddComponent<GraphicRaycaster>();
             }
 
             canvas.overrideSorting = true;

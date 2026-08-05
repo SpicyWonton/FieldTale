@@ -61,8 +61,10 @@
     <type fullname="GameFramework.Procedure.IProcedureManager" preserve="all" />
     <type fullname="GameFramework.Procedure.ProcedureBase" preserve="all" />
     <type fullname="GameFramework.Resource.LoadAssetCallbacks" preserve="all" />
+    <type fullname="GameFramework.Resource.LoadAssetDependencyAssetCallback" preserve="all" />
     <type fullname="GameFramework.Resource.LoadAssetFailureCallback" preserve="all" />
     <type fullname="GameFramework.Resource.LoadAssetSuccessCallback" preserve="all" />
+    <type fullname="GameFramework.Resource.LoadAssetUpdateCallback" preserve="all" />
     <type fullname="GameFramework.Resource.LoadResourceStatus" preserve="all" />
     <type fullname="GameFramework.Utility" preserve="all" />
     <type fullname="GameFramework.Utility/Text" preserve="all" />

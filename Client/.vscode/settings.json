@@ -59,5 +59,6 @@
     "dotnet.defaultSolution": "Client.sln",
     "dotrush.roslyn.projectOrSolutionFiles": [
         "c:\\Codes\\Fork\\FieldTale\\Client\\Client.sln"
-    ]
+    ],
+    "dotnet.preferCSharpExtension": true
 }
