@@ -16,15 +16,21 @@ namespace FieldTale.HotUpdate
                 return;
             }
 
-            int playerId = PlayerIdMapper.GetOrCreate(message.PlayerId);
-            UnityGameFramework.Runtime.Entity entity = FrameworkRoot.Entity.GetEntity(playerId);
-            Player player = entity == null ? null : entity.Logic as Player;
-            if (player != null)
+            if (!PlayerFactory.TryGet(message.PlayerId, out Player player))
             {
-                player.ReceiveLogicTick(
-                    new Vector3(message.Pos.X, message.Pos.Y, message.Pos.Z),
+                UnityGameFramework.Runtime.Log.Warning($"[Network][M2C_PlayerMove] PlayerId={message.PlayerId} is not in the client ECS world.");
+                await FTask.CompletedTask;
+                return;
+            }
+
+            PlayerSnapshotComponent snapshots = player.Snapshots;
+            if (message.ServerTick > snapshots.LastQueuedServerTick)
+            {
+                snapshots.LastQueuedServerTick = message.ServerTick;
+                snapshots.Incoming.Add(new PlayerNetworkSnapshot(
                     message.ServerTick,
-                    message.LastProcessedClientTick);
+                    message.LastProcessedClientTick,
+                    new Vector2(message.Pos.X, message.Pos.Y)));
             }
 
             await FTask.CompletedTask;

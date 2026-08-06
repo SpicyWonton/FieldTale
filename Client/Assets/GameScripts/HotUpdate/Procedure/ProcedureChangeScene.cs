@@ -14,6 +14,7 @@ namespace FieldTale.HotUpdate
             base.OnEnter(procedureOwner);
 
             m_IsChangeSceneComplete = false;
+            PlayerFactory.DisposeAll();
 
             FrameworkRoot.Event.Subscribe(LoadSceneSuccessEventArgs.EventId, OnLoadSceneSuccess);
             FrameworkRoot.Event.Subscribe(LoadSceneFailureEventArgs.EventId, OnLoadSceneFailure);
