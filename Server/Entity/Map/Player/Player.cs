@@ -29,7 +29,6 @@ public sealed class Player : Entity
     public int MoveY;
     public uint LastReceivedInputTick;         // 已通过顺序校验并进入队列的最新逻辑帧。
     public uint LastProcessedInputTick;        // 已实际作用到权威位置的最新逻辑帧。
-    public uint LastBroadcastInputTick;
     public uint ServerTick;
     public long NextTickTimestamp;
 

@@ -72,7 +72,6 @@ public sealed class PlayerUpdateSystem : UpdateSystem<Player>
 
         // 快照中的位置与 LastProcessedInputTick 必须来自同一次模拟结果。
         BroadcastSnapshot(self);
-        self.LastBroadcastInputTick = self.LastProcessedInputTick;
     }
 
     private static void BroadcastSnapshot(Player player)

@@ -14,6 +14,16 @@ public sealed class C2M_InitCompleteHandler : Roaming<Player, C2M_InitComplete>
             return;
         }
 
+        // A rebuilt client starts its input sequence at tick 1. Clear movement state left by
+        // the previous connection so those new inputs are not rejected as stale frames.
+        player.MoveX = 0;
+        player.MoveY = 0;
+        player.LastReceivedInputTick = 0;
+        player.LastProcessedInputTick = 0;
+        player.LastBroadcastInputTick = 0;
+        player.NextTickTimestamp = 0;
+        player.PendingInputs.Clear();
+
         var scene = player.Scene;
         var playerId = player.Id;
         using var playerInfo = player.ToProtocol(false);
