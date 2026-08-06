@@ -20,7 +20,6 @@ public sealed class C2M_InitCompleteHandler : Roaming<Player, C2M_InitComplete>
         player.MoveY = 0;
         player.LastReceivedInputTick = 0;
         player.LastProcessedInputTick = 0;
-        player.LastBroadcastInputTick = 0;
         player.NextTickTimestamp = 0;
         player.PendingInputs.Clear();
 

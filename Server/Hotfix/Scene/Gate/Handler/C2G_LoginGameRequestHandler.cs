@@ -25,7 +25,13 @@ public sealed class C2G_LoginGameRequestHandler : MessageRPC<C2G_LoginGameReques
             response.ErrorCode = 1;
             return;
         }
-        
+
+        if (session.GetComponent<GateAccountFlagComponent>() != null)
+        {
+            response.ErrorCode = 1;
+            return;
+        }
+
         if (!AccountManageHelper.Add(session.Scene, accountName, password, out var account))
         {
             response.ErrorCode = 1;
@@ -36,6 +42,10 @@ public sealed class C2G_LoginGameRequestHandler : MessageRPC<C2G_LoginGameReques
         // 挂载组件用来标记这个Session下的Account，后面下线流程也会用到
         session.AddComponent<GateAccountFlagComponent>().Account = account;
         // 执行上线流程
-        await AccountHelper.Online(session, account);
+        var errorCode = await AccountHelper.Online(session, account);
+        if (errorCode != 0)
+        {
+            response.ErrorCode = errorCode;
+        }
     }
 }

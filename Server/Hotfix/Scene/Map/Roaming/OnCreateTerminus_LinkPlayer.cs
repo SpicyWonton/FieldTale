@@ -36,7 +36,18 @@ public sealed class OnCreateTerminus_LinkPlayer : AsyncEventSystem<OnCreateTermi
                     }
                     case CreateTerminusType.ReLink:
                     {
-                        Log.Debug("ReLink");
+                        if (terminus.TerminusEntity is not Player player)
+                        {
+                            Log.Error("ReLink Player failed: Terminus is not linked to a Player.");
+                            break;
+                        }
+
+                        var playerManageComponent = scene.GetComponent<PlayerManageComponent>();
+                        if (!playerManageComponent.TryGetPlayer(player.Id, out _))
+                        {
+                            PlayerManageHelper.AddPlayer(player, PlayerManageHelper.EAddPlayerNotify.NoNotification);
+                        }
+
                         break;
                     }
                 }

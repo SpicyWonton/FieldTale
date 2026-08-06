@@ -19,7 +19,7 @@ public static class AccountHelper
     {
         var accountLinkArgs = Entity.Create<AccountLinkArgs>(session.Scene);
         accountLinkArgs.AccountName = account.Name;
-        
+
         try
         {
             // 1.创建Roaming协议,用来方便的把消息通过Gate中转到Map
@@ -62,10 +62,10 @@ public static class AccountHelper
                 {
                     // 表示当前Session已经建立了漫游，并且漫游的ID是另外一个ID，这个情况是不允许的。
                     // 如果出现这个情况肯定是你设计的问题了，请仔细检查一下。
-                    break;
+                    return 1;
                 }
             }
-            
+
             account.Session = session;
             return 0;
         }
@@ -81,23 +81,35 @@ public static class AccountHelper
     /// <param name="account"></param>
     public static async FTask Offline(Account account)
     {
-        if (!RoamingHelper.TryGetRoaming(account.Scene, account.Id, out var roaming))
-        {
-            // 如果没有查询到Roaming就不需要继续进行下面的逻辑了。
-            return;
-        }
+        var scene = account.Scene;
+        var accountId = account.Id;
+        var accountName = account.Name;
 
-        // 发送给Map进行下线操作
-        var g2MOfflineRequest = G2M_OfflineRequest.Create();
-        // 这里可以增加一下延迟下线的时间，但本例子没有实现，需要的话可以自己实现下
-        g2MOfflineRequest.OfflineTime = 0;
-        // 发送给Map的漫游消息
-        var response = await roaming.Call(g2MOfflineRequest);
-        if (response.ErrorCode != 0)
+        try
         {
-            Log.Error($"下线失败 看到这个日志一定要解决这个问题 ErrorCode:{response.ErrorCode}");
+            if (!RoamingHelper.TryGetRoaming(scene, accountId, out var roaming))
+            {
+                return;
+            }
+
+            // 发送给Map进行下线操作
+            var g2MOfflineRequest = G2M_OfflineRequest.Create();
+            // 这里可以增加一下延迟下线的时间，但本例子没有实现，需要的话可以自己实现下
+            g2MOfflineRequest.OfflineTime = 0;
+            // 发送给Map的漫游消息
+            var response = await roaming.Call(g2MOfflineRequest);
+            if (response.ErrorCode != 0)
+            {
+                Log.Error($"Account:{accountName} 下线失败 ErrorCode:{response.ErrorCode}");
+            }
         }
-        // 移除Account
-        AccountManageHelper.Remove(account.Scene, account.Name);
+        finally
+        {
+            if (AccountManageHelper.TryGetAccount(scene, accountName, out var currentAccount) &&
+                currentAccount.Id == accountId)
+            {
+                AccountManageHelper.Remove(scene, accountName);
+            }
+        }
     }
 }

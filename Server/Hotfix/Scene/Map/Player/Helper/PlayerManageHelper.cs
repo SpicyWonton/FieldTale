@@ -95,8 +95,14 @@ public static class PlayerManageHelper
     /// </summary>
     /// <param name="scene"></param>
     /// <param name="playerId"></param>
+    /// <param name="notify"></param>
+    /// <param name="isDispose">是否在移出管理器后销毁Player</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void RemovePlayer(Scene scene, long playerId, ERemovePlayerNotify notify = ERemovePlayerNotify.SyncEveryone)
+    public static void RemovePlayer(
+        Scene scene,
+        long playerId,
+        ERemovePlayerNotify notify = ERemovePlayerNotify.SyncEveryone,
+        bool isDispose = true)
     {
         var playerManageComponent = scene.GetComponent<PlayerManageComponent>();
         if (!playerManageComponent.Players.Remove(playerId, out var player))
@@ -147,7 +153,10 @@ public static class PlayerManageHelper
         }
         finally
         {
-            player.Dispose();
+            if (isDispose)
+            {
+                player.Dispose();
+            }
         }
     }
 
