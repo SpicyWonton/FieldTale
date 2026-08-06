@@ -19,6 +19,11 @@ namespace FieldTale.HotUpdate
             return entityId;
         }
 
+        public static bool TryGet(long playerId, out int entityId)
+        {
+            return s_PlayerEntityIds.TryGetValue(playerId, out entityId);
+        }
+
         public static bool Remove(long playerId)
         {
             return s_PlayerEntityIds.Remove(playerId);
