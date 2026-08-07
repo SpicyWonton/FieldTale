@@ -921,9 +921,7 @@ MonoBehaviour:
   m_InstanceRoot: {fileID: 0}
   m_EntityHelperTypeName: UnityGameFramework.Runtime.DefaultEntityHelper
   m_CustomEntityHelper: {fileID: 0}
-  m_EntityGroupHelperTypeName: UnityGameFramework.Runtime.DefaultEntityGroupHelper
-  m_CustomEntityGroupHelper: {fileID: 0}
-  m_EntityGroups: []
+  m_EntityGroupConfigs: []
 --- !u!114 &11497722
 MonoBehaviour:
   m_ObjectHideFlags: 1

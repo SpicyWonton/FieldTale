@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
@@ -37,7 +37,7 @@ namespace UnityGameFramework.Runtime
             }
         }
 
-        public static ShowEntityInfo Create(Type entityLogicType, object userData)
+        internal static ShowEntityInfo Create(Type entityLogicType, object userData)
         {
             ShowEntityInfo showEntityInfo = ReferencePool.Acquire<ShowEntityInfo>();
             showEntityInfo.m_EntityLogicType = entityLogicType;

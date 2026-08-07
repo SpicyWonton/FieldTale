@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
@@ -6,7 +6,6 @@
 //------------------------------------------------------------
 
 using GameFramework;
-using GameFramework.Entity;
 using System;
 using UnityEngine;
 
@@ -15,11 +14,11 @@ namespace UnityGameFramework.Runtime
     /// <summary>
     /// 实体。
     /// </summary>
-    public sealed class Entity : MonoBehaviour, IEntity
+    public sealed class Entity : MonoBehaviour
     {
         private int m_Id;
         private string m_EntityAssetName;
-        private IEntityGroup m_EntityGroup;
+        private EntityGroup m_EntityGroup;
         private EntityLogic m_EntityLogic;
 
         /// <summary>
@@ -47,7 +46,7 @@ namespace UnityGameFramework.Runtime
         /// <summary>
         /// 获取实体实例。
         /// </summary>
-        public object Handle
+        internal object Handle
         {
             get
             {
@@ -58,7 +57,7 @@ namespace UnityGameFramework.Runtime
         /// <summary>
         /// 获取实体所属的实体组。
         /// </summary>
-        public IEntityGroup EntityGroup
+        public EntityGroup EntityGroup
         {
             get
             {
@@ -85,7 +84,7 @@ namespace UnityGameFramework.Runtime
         /// <param name="entityGroup">实体所属的实体组。</param>
         /// <param name="isNewInstance">是否是新实例。</param>
         /// <param name="userData">用户自定义数据。</param>
-        public void OnInit(int entityId, string entityAssetName, IEntityGroup entityGroup, bool isNewInstance, object userData)
+        internal void OnInit(int entityId, string entityAssetName, EntityGroup entityGroup, bool isNewInstance, object userData)
         {
             m_Id = entityId;
             m_EntityAssetName = entityAssetName;
@@ -95,16 +94,19 @@ namespace UnityGameFramework.Runtime
             }
             else if (m_EntityGroup != entityGroup)
             {
-                Log.Error("Entity group is inconsistent for non-new-instance entity.");
-                return;
+                throw new GameFrameworkException("Entity group is inconsistent for non-new-instance entity.");
             }
 
-            ShowEntityInfo showEntityInfo = (ShowEntityInfo)userData;
-            Type entityLogicType = showEntityInfo.EntityLogicType;
-            if (entityLogicType == null)
+            ShowEntityInfo showEntityInfo = userData as ShowEntityInfo;
+            if (showEntityInfo == null)
             {
-                Log.Error("Entity logic type is invalid.");
-                return;
+                throw new GameFrameworkException("Show entity info is invalid.");
+            }
+
+            Type entityLogicType = showEntityInfo.EntityLogicType;
+            if (entityLogicType == null || !typeof(EntityLogic).IsAssignableFrom(entityLogicType) || entityLogicType.IsAbstract || entityLogicType.ContainsGenericParameters)
+            {
+                throw new GameFrameworkException("Entity logic type is invalid.");
             }
 
             if (m_EntityLogic != null)
@@ -122,53 +124,55 @@ namespace UnityGameFramework.Runtime
             m_EntityLogic = gameObject.AddComponent(entityLogicType) as EntityLogic;
             if (m_EntityLogic == null)
             {
-                Log.Error("Entity '{0}' can not add entity logic.", entityAssetName);
-                return;
+                throw new GameFrameworkException(Utility.Text.Format("Entity '{0}' can not add entity logic.", entityAssetName));
             }
 
-            try
-            {
-                m_EntityLogic.OnInit(showEntityInfo.UserData);
-            }
-            catch (Exception exception)
-            {
-                Log.Error("Entity '[{0}]{1}' OnInit with exception '{2}'.", m_Id, m_EntityAssetName, exception);
-            }
+            m_EntityLogic.OnInit(showEntityInfo.UserData);
         }
 
         /// <summary>
         /// 实体回收。
         /// </summary>
-        public void OnRecycle()
+        internal void OnRecycle()
         {
             try
             {
-                m_EntityLogic.OnRecycle();
-                m_EntityLogic.enabled = false;
+                m_EntityLogic?.OnRecycle();
             }
             catch (Exception exception)
             {
                 Log.Error("Entity '[{0}]{1}' OnRecycle with exception '{2}'.", m_Id, m_EntityAssetName, exception);
             }
+            finally
+            {
+                if (m_EntityLogic != null)
+                {
+                    m_EntityLogic.enabled = false;
+                }
 
-            m_Id = 0;
+                m_Id = 0;
+                m_EntityAssetName = null;
+            }
         }
 
         /// <summary>
         /// 实体显示。
         /// </summary>
         /// <param name="userData">用户自定义数据。</param>
-        public void OnShow(object userData)
+        internal void OnShow(object userData)
         {
-            ShowEntityInfo showEntityInfo = (ShowEntityInfo)userData;
-            try
+            ShowEntityInfo showEntityInfo = userData as ShowEntityInfo;
+            if (showEntityInfo == null)
             {
-                m_EntityLogic.OnShow(showEntityInfo.UserData);
+                throw new GameFrameworkException("Show entity info is invalid.");
             }
-            catch (Exception exception)
+
+            if (m_EntityLogic == null)
             {
-                Log.Error("Entity '[{0}]{1}' OnShow with exception '{2}'.", m_Id, m_EntityAssetName, exception);
+                throw new GameFrameworkException("Entity logic is invalid.");
             }
+
+            m_EntityLogic.OnShow(showEntityInfo.UserData);
         }
 
         /// <summary>
@@ -176,7 +180,7 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         /// <param name="isShutdown">是否是关闭实体管理器时触发。</param>
         /// <param name="userData">用户自定义数据。</param>
-        public void OnHide(bool isShutdown, object userData)
+        internal void OnHide(bool isShutdown, object userData)
         {
             try
             {
@@ -192,13 +196,13 @@ namespace UnityGameFramework.Runtime
         /// 实体附加子实体。
         /// </summary>
         /// <param name="childEntity">附加的子实体。</param>
+        /// <param name="parentTransform">被附加父实体的位置。</param>
         /// <param name="userData">用户自定义数据。</param>
-        public void OnAttached(IEntity childEntity, object userData)
+        internal void OnAttached(Entity childEntity, Transform parentTransform, object userData)
         {
-            AttachEntityInfo attachEntityInfo = (AttachEntityInfo)userData;
             try
             {
-                m_EntityLogic.OnAttached(((Entity)childEntity).Logic, attachEntityInfo.ParentTransform, attachEntityInfo.UserData);
+                m_EntityLogic.OnAttached(childEntity.Logic, parentTransform, userData);
             }
             catch (Exception exception)
             {
@@ -211,11 +215,11 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         /// <param name="childEntity">解除的子实体。</param>
         /// <param name="userData">用户自定义数据。</param>
-        public void OnDetached(IEntity childEntity, object userData)
+        internal void OnDetached(Entity childEntity, object userData)
         {
             try
             {
-                m_EntityLogic.OnDetached(((Entity)childEntity).Logic, userData);
+                m_EntityLogic.OnDetached(childEntity.Logic, userData);
             }
             catch (Exception exception)
             {
@@ -227,20 +231,18 @@ namespace UnityGameFramework.Runtime
         /// 实体附加子实体。
         /// </summary>
         /// <param name="parentEntity">被附加的父实体。</param>
+        /// <param name="parentTransform">被附加父实体的位置。</param>
         /// <param name="userData">用户自定义数据。</param>
-        public void OnAttachTo(IEntity parentEntity, object userData)
+        internal void OnAttachTo(Entity parentEntity, Transform parentTransform, object userData)
         {
-            AttachEntityInfo attachEntityInfo = (AttachEntityInfo)userData;
             try
             {
-                m_EntityLogic.OnAttachTo(((Entity)parentEntity).Logic, attachEntityInfo.ParentTransform, attachEntityInfo.UserData);
+                m_EntityLogic.OnAttachTo(parentEntity.Logic, parentTransform, userData);
             }
             catch (Exception exception)
             {
                 Log.Error("Entity '[{0}]{1}' OnAttachTo with exception '{2}'.", m_Id, m_EntityAssetName, exception);
             }
-
-            ReferencePool.Release(attachEntityInfo);
         }
 
         /// <summary>
@@ -248,11 +250,11 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         /// <param name="parentEntity">被解除的父实体。</param>
         /// <param name="userData">用户自定义数据。</param>
-        public void OnDetachFrom(IEntity parentEntity, object userData)
+        internal void OnDetachFrom(Entity parentEntity, object userData)
         {
             try
             {
-                m_EntityLogic.OnDetachFrom(((Entity)parentEntity).Logic, userData);
+                m_EntityLogic.OnDetachFrom(parentEntity.Logic, userData);
             }
             catch (Exception exception)
             {
@@ -265,7 +267,7 @@ namespace UnityGameFramework.Runtime
         /// </summary>
         /// <param name="elapseSeconds">逻辑流逝时间，以秒为单位。</param>
         /// <param name="realElapseSeconds">真实流逝时间，以秒为单位。</param>
-        public void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        internal void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
             try
             {

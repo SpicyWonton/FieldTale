@@ -539,23 +539,23 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 11494652, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_EntityGroups.Array.size
+      propertyPath: m_EntityGroupConfigs.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11494652, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_EntityGroups.Array.data[0].m_Name
+      propertyPath: m_EntityGroupConfigs.Array.data[0].m_Name
       value: Entity
       objectReference: {fileID: 0}
     - target: {fileID: 11494652, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_EntityGroups.Array.data[0].m_InstanceCapacity
+      propertyPath: m_EntityGroupConfigs.Array.data[0].m_InstanceCapacity
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 11494652, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_EntityGroups.Array.data[0].m_InstanceExpireTime
+      propertyPath: m_EntityGroupConfigs.Array.data[0].m_InstanceExpireTime
       value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 11494652, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
-      propertyPath: m_EntityGroups.Array.data[0].m_InstanceAutoReleaseInterval
+      propertyPath: m_EntityGroupConfigs.Array.data[0].m_InstanceAutoReleaseInterval
       value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 11497722, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}

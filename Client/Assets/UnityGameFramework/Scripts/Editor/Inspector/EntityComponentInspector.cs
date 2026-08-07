@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
@@ -6,7 +6,6 @@
 //------------------------------------------------------------
 
 using GameFramework;
-using GameFramework.Entity;
 using UnityEditor;
 using UnityGameFramework.Runtime;
 
@@ -18,10 +17,9 @@ namespace UnityGameFramework.Editor
         private SerializedProperty m_EnableShowEntityUpdateEvent = null;
         private SerializedProperty m_EnableShowEntityDependencyAssetEvent = null;
         private SerializedProperty m_InstanceRoot = null;
-        private SerializedProperty m_EntityGroups = null;
+        private SerializedProperty m_EntityGroupConfigs = null;
 
         private HelperInfo<EntityHelperBase> m_EntityHelperInfo = new HelperInfo<EntityHelperBase>("Entity");
-        private HelperInfo<EntityGroupHelperBase> m_EntityGroupHelperInfo = new HelperInfo<EntityGroupHelperBase>("EntityGroup");
 
         public override void OnInspectorGUI()
         {
@@ -37,8 +35,7 @@ namespace UnityGameFramework.Editor
                 EditorGUILayout.PropertyField(m_EnableShowEntityDependencyAssetEvent);
                 EditorGUILayout.PropertyField(m_InstanceRoot);
                 m_EntityHelperInfo.Draw();
-                m_EntityGroupHelperInfo.Draw();
-                EditorGUILayout.PropertyField(m_EntityGroups, true);
+                EditorGUILayout.PropertyField(m_EntityGroupConfigs, true);
             }
             EditorGUI.EndDisabledGroup();
 
@@ -46,8 +43,8 @@ namespace UnityGameFramework.Editor
             {
                 EditorGUILayout.LabelField("Entity Group Count", t.EntityGroupCount.ToString());
                 EditorGUILayout.LabelField("Entity Count (Total)", t.EntityCount.ToString());
-                IEntityGroup[] entityGroups = t.GetAllEntityGroups();
-                foreach (IEntityGroup entityGroup in entityGroups)
+                EntityGroup[] entityGroups = t.GetAllEntityGroups();
+                foreach (EntityGroup entityGroup in entityGroups)
                 {
                     EditorGUILayout.LabelField(Utility.Text.Format("Entity Count ({0})", entityGroup.Name), entityGroup.EntityCount.ToString());
                 }
@@ -70,10 +67,9 @@ namespace UnityGameFramework.Editor
             m_EnableShowEntityUpdateEvent = serializedObject.FindProperty("m_EnableShowEntityUpdateEvent");
             m_EnableShowEntityDependencyAssetEvent = serializedObject.FindProperty("m_EnableShowEntityDependencyAssetEvent");
             m_InstanceRoot = serializedObject.FindProperty("m_InstanceRoot");
-            m_EntityGroups = serializedObject.FindProperty("m_EntityGroups");
+            m_EntityGroupConfigs = serializedObject.FindProperty("m_EntityGroupConfigs");
 
             m_EntityHelperInfo.Init(serializedObject);
-            m_EntityGroupHelperInfo.Init(serializedObject);
 
             RefreshTypeNames();
         }
@@ -81,7 +77,6 @@ namespace UnityGameFramework.Editor
         private void RefreshTypeNames()
         {
             m_EntityHelperInfo.Refresh();
-            m_EntityGroupHelperInfo.Refresh();
             serializedObject.ApplyModifiedProperties();
         }
     }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <linker>
   <assembly fullname="GameFramework" preserve="all" />
   <assembly fullname="UnityGameFramework.Runtime" preserve="all" />
@@ -18,7 +18,6 @@ For versions before Unity 2017.3 (excluded), please delete the above contents an
     <namespace fullname="GameFramework.DataTable" preserve="all" />
     <namespace fullname="GameFramework.Debugger" preserve="all" />
     <namespace fullname="GameFramework.Download" preserve="all" />
-    <namespace fullname="GameFramework.Entity" preserve="all" />
     <namespace fullname="GameFramework.Event" preserve="all" />
     <namespace fullname="GameFramework.FileSystem" preserve="all" />
     <namespace fullname="GameFramework.Fsm" preserve="all" />
