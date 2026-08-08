@@ -13,7 +13,6 @@ namespace UnityGameFramework.Runtime
     {
         private const int DefaultPriority = 0;
         private EventComponent m_EventComponent;
-        private bool m_IsReady;
 
         [SerializeField] private bool m_EnableShowEntityUpdateEvent = false;
         [SerializeField] private bool m_EnableShowEntityDependencyAssetEvent = false;
@@ -27,7 +26,6 @@ namespace UnityGameFramework.Runtime
         {
             base.Awake();
             InitializeEntityCore();
-            m_IsReady = false;
         }
 
         private void Start()
@@ -75,12 +73,10 @@ namespace UnityGameFramework.Runtime
                 }
             }
 
-            m_IsReady = true;
         }
 
         protected override void OnDestroy()
         {
-            m_IsReady = false;
             ShutdownEntityCore();
             m_EventComponent = null;
             base.OnDestroy();
@@ -88,7 +84,6 @@ namespace UnityGameFramework.Runtime
 
         public bool AddEntityGroup(string name, float autoReleaseInterval, int capacity, float expireTime, int priority)
         {
-            EnsureReady();
             return AddEntityGroupWithRoot(name, autoReleaseInterval, capacity, expireTime, priority);
         }
 
@@ -99,7 +94,6 @@ namespace UnityGameFramework.Runtime
 
         public void ShowEntity(int id, Type logicType, string assetName, string groupName, int priority = DefaultPriority, object userData = null)
         {
-            EnsureReady();
             ValidateEntityLogicType(logicType);
             ShowEntityInternal(id, assetName, groupName, priority, ShowEntityInfo.Create(logicType, userData));
         }
@@ -111,7 +105,6 @@ namespace UnityGameFramework.Runtime
 
         public void AttachEntity(Entity child, Entity parent, string path, object userData = null)
         {
-            EnsureReady();
             if (!ValidateAttachEntities(child, parent)) return;
 
             Transform parentTransform = string.IsNullOrEmpty(path) ? parent.Logic.CachedTransform : parent.Logic.CachedTransform.Find(path);
@@ -128,21 +121,18 @@ namespace UnityGameFramework.Runtime
 
         public void AttachEntity(Entity child, Entity parent, Transform parentTransform, object userData = null)
         {
-            EnsureReady();
             if (!ValidateAttachEntities(child, parent)) return;
             AttachEntityInternal(child, parent, parentTransform ?? parent.Logic.CachedTransform, userData);
         }
 
         public void SetEntityInstanceLocked(Entity entity, bool locked)
         {
-            EnsureReady();
             if (!TryGetEntityGroup(entity, out EntityGroup entityGroup)) return;
             entityGroup.SetEntityInstanceLocked(entity.gameObject, locked);
         }
 
         public void SetInstancePriority(Entity entity, int priority)
         {
-            EnsureReady();
             if (!TryGetEntityGroup(entity, out EntityGroup entityGroup)) return;
             entityGroup.SetEntityInstancePriority(entity.gameObject, priority);
         }
@@ -168,14 +158,6 @@ namespace UnityGameFramework.Runtime
 
             Destroy(groupRoot.gameObject);
             return false;
-        }
-
-        private void EnsureReady()
-        {
-            if (!m_IsReady || m_IsShutdown)
-            {
-                throw new GameFrameworkException("Entity component is not ready.");
-            }
         }
 
         private static void ValidateEntityLogicType(Type logicType)
