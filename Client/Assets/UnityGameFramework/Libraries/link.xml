@@ -21,7 +21,6 @@ For versions before Unity 2017.3 (excluded), please delete the above contents an
     <namespace fullname="GameFramework.FileSystem" preserve="all" />
     <namespace fullname="GameFramework.Fsm" preserve="all" />
     <namespace fullname="GameFramework.Localization" preserve="all" />
-    <namespace fullname="GameFramework.Network" preserve="all" />
     <namespace fullname="GameFramework.ObjectPool" preserve="all" />
     <namespace fullname="GameFramework.Procedure" preserve="all" />
     <namespace fullname="GameFramework.Resource" preserve="all" />
