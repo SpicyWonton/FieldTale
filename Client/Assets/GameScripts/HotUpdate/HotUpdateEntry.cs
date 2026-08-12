@@ -52,7 +52,23 @@ namespace FieldTale.HotUpdate
                 new ProcedureLogin(),
             };
             procedureManager.Initialize(GameFrameworkEntry.GetModule<IFsmManager>(), procedures);
+            EnsureCameraFollowComponent();
             procedureManager.StartProcedure<ProcedurePreload>();
+        }
+
+        private static void EnsureCameraFollowComponent()
+        {
+            Camera gameCamera = Camera.main;
+            if (gameCamera == null)
+            {
+                Log.Error("GameCamera is not configured in the Launcher scene.");
+                return;
+            }
+
+            if (gameCamera.GetComponent<CameraFollowComponent>() == null)
+            {
+                gameCamera.gameObject.AddComponent<CameraFollowComponent>();
+            }
         }
 
         private static void OnLoadAOTDllSuccess(string assetName, object asset, float duration, object userdata)

@@ -20,6 +20,7 @@ namespace FieldTale.HotUpdate
         {
             base.OnInit(userData);
             CachedRigidbody2D = GetComponent<Rigidbody2D>();
+            CachedRigidbody2D.interpolation = RigidbodyInterpolation2D.Interpolate;
         }
 
         protected override void OnShow(object userData)
@@ -36,6 +37,11 @@ namespace FieldTale.HotUpdate
             // 绑定后由 PlayerLateUpdateSystem 持续写入目标位姿。
             m_Player = player;
             m_Player.View = this;
+            if (m_Player.IsSelf)
+            {
+                CameraFollowComponent.SetTarget(CachedTransform);
+            }
+
             m_TargetPosition = m_Player.Transform.Position;
             m_TargetRotation = m_Player.Transform.Rotation;
             m_HasTargetPose = true;
@@ -52,6 +58,8 @@ namespace FieldTale.HotUpdate
 
         protected override void OnHide(bool isShutdown, object userData)
         {
+            CameraFollowComponent.ClearTarget(CachedTransform);
+
             if (m_Player != null && ReferenceEquals(m_Player.View, this))
             {
                 m_Player.View = null;
