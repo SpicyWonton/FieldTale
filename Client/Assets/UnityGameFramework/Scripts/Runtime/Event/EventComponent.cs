@@ -19,7 +19,7 @@ namespace UnityGameFramework.Runtime
     [AddComponentMenu("Game Framework/Event")]
     public sealed class EventComponent : GameFrameworkComponent
     {
-        private IEventManager m_EventManager = null;
+        private EventPool<GameEventArgs> m_EventPool = null;
 
         /// <summary>
         /// 获取事件处理函数的数量。
@@ -28,7 +28,7 @@ namespace UnityGameFramework.Runtime
         {
             get
             {
-                return m_EventManager.EventHandlerCount;
+                return m_EventPool.EventHandlerCount;
             }
         }
 
@@ -39,7 +39,7 @@ namespace UnityGameFramework.Runtime
         {
             get
             {
-                return m_EventManager.EventCount;
+                return m_EventPool.EventCount;
             }
         }
 
@@ -50,12 +50,7 @@ namespace UnityGameFramework.Runtime
         {
             base.Awake();
 
-            m_EventManager = GameFrameworkEntry.GetModule<IEventManager>();
-            if (m_EventManager == null)
-            {
-                Log.Fatal("Event manager is invalid.");
-                return;
-            }
+            m_EventPool = new EventPool<GameEventArgs>(EventPoolMode.AllowNoHandler | EventPoolMode.AllowMultiHandler);
         }
 
         private void Start()
@@ -69,7 +64,7 @@ namespace UnityGameFramework.Runtime
         /// <returns>事件处理函数的数量。</returns>
         public int Count(int id)
         {
-            return m_EventManager.Count(id);
+            return m_EventPool.Count(id);
         }
 
         /// <summary>
@@ -80,7 +75,7 @@ namespace UnityGameFramework.Runtime
         /// <returns>是否存在事件处理函数。</returns>
         public bool Check(int id, EventHandler<GameEventArgs> handler)
         {
-            return m_EventManager.Check(id, handler);
+            return m_EventPool.Check(id, handler);
         }
 
         /// <summary>
@@ -90,7 +85,7 @@ namespace UnityGameFramework.Runtime
         /// <param name="handler">要订阅的事件处理回调函数。</param>
         public void Subscribe(int id, EventHandler<GameEventArgs> handler)
         {
-            m_EventManager.Subscribe(id, handler);
+            m_EventPool.Subscribe(id, handler);
         }
 
         /// <summary>
@@ -100,7 +95,7 @@ namespace UnityGameFramework.Runtime
         /// <param name="handler">要取消订阅的事件处理回调函数。</param>
         public void Unsubscribe(int id, EventHandler<GameEventArgs> handler)
         {
-            m_EventManager.Unsubscribe(id, handler);
+            m_EventPool.Unsubscribe(id, handler);
         }
 
         /// <summary>
@@ -109,7 +104,7 @@ namespace UnityGameFramework.Runtime
         /// <param name="handler">要设置的默认事件处理函数。</param>
         public void SetDefaultHandler(EventHandler<GameEventArgs> handler)
         {
-            m_EventManager.SetDefaultHandler(handler);
+            m_EventPool.SetDefaultHandler(handler);
         }
 
         /// <summary>
@@ -119,7 +114,7 @@ namespace UnityGameFramework.Runtime
         /// <param name="e">事件内容。</param>
         public void Fire(object sender, GameEventArgs e)
         {
-            m_EventManager.Fire(sender, e);
+            m_EventPool.Fire(sender, e);
         }
 
         /// <summary>
@@ -129,7 +124,18 @@ namespace UnityGameFramework.Runtime
         /// <param name="e">事件内容。</param>
         public void FireNow(object sender, GameEventArgs e)
         {
-            m_EventManager.FireNow(sender, e);
+            m_EventPool.FireNow(sender, e);
+        }
+
+        internal override void Tick(float elapseSeconds, float realElapseSeconds)
+        {
+            m_EventPool.Update(elapseSeconds, realElapseSeconds);
+        }
+
+        protected override void OnDestroy()
+        {
+            m_EventPool.Shutdown();
+            base.OnDestroy();
         }
     }
 }
