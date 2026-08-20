@@ -163,10 +163,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 77223147}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744ea2ac262d44f478bcd3c9adacca57, type: 3}
+  m_Script: {fileID: 11500000, guid: b3a0a5d2581d4982abde6f7139c520d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runtimeName: FantasyRuntime
   remoteIP: 127.0.0.1
   remotePort: 20000
   protocol: 0
@@ -178,7 +177,7 @@ MonoBehaviour:
   heartbeatTimeOut: 30000
   heartbeatTimeOutInterval: 5000
   maxPingSamples: 4
-  isRuntimeInstance: 1
+  connectOnStart: 1
   onConnectComplete:
     m_PersistentCalls:
       m_Calls: []

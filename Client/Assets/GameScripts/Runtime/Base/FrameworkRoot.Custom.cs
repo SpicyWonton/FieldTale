@@ -17,9 +17,16 @@ namespace FieldTale
             private set;
         }
 
+        public static FantasyComponent Fantasy
+        {
+            get;
+            private set;
+        }
+
         private static void InitCustomComponents()
         {
             BuiltinData = UnityGameFramework.Runtime.GameEntry.GetComponent<BuiltinDataComponent>();
+            Fantasy = UnityGameFramework.Runtime.GameEntry.GetComponent<FantasyComponent>();
         }
     }
 }
